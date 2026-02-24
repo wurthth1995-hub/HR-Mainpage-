@@ -463,6 +463,17 @@ const translations = {
         ch8_title: "กฎระเบียบและข้อบังคับ",
         ch9_title: "กระบวนการร้องทุกข์",
 
+        // Chapter Section
+        chapter1_title: "บทที่ 1",
+        chapter2_title: "บทที่ 2",
+        chapter3_title: "บทที่ 3",
+        chapter4_title: "บทที่ 4",
+        chapter5_title: "บทที่ 5",
+        chapter6_title: "บทที่ 6",
+        chapter7_title: "บทที่ 7",
+        chapter8_title: "บทที่ 8",
+        chapter9_title: "บทที่ 9",
+
         // --- Manual Content Detail Translations ---
         // Chapter 1
         mn_ch1_sec1_title: "การจำแนกประเภทงานและการจัดลำดับ",
