@@ -94,7 +94,7 @@ const translations = {
         ch9_title: "Grievance Procedure",
 
         // Chapter Section
-        ch1_charpter: "Chapter 1",
+        chapter1_title: "Chapter 1",
 
         // --- Manual Content Detail Translations ---
         // Chapter 1
