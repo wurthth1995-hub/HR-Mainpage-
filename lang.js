@@ -93,6 +93,9 @@ const translations = {
         ch8_title: "Rules and Regulations",
         ch9_title: "Grievance Procedure",
 
+        // Chapter Section
+        ch1_charpter: "Chapter 1",
+
         // --- Manual Content Detail Translations ---
         // Chapter 1
         mn_ch1_sec1_title: "Job Classification and Grading",
