@@ -1299,6 +1299,7 @@
             <div class="space-y-4">
                 <input type="text" id="admin-user" placeholder="Username" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 outline-none text-sm">
                 <input type="password" id="admin-pass" placeholder="Password" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 outline-none text-sm">
+                <!-- เพิ่ม ID เพื่อให้เปลี่ยนข้อความตอนโหลดได้ -->
                 <button id="login-submit-btn" onclick="submitLogin()" class="w-full bg-red-700 hover:bg-red-800 text-white font-bold py-2 rounded-lg transition-colors text-sm">เข้าสู่ระบบ</button>
             </div>
         </div>
@@ -1329,13 +1330,13 @@
                         <!-- Hidden File Input -->
                         <input type="file" id="img-input" accept="image/*" hidden onchange="handleImageUpload(event)">
                     </div>
+                    <!-- Editable Content Div -->
                     <div id="new-post-content" class="rich-editor" contenteditable="true" placeholder="พิมพ์เนื้อหาที่นี่..."></div>
                 </div>
                 <button onclick="submitNewPost()" id="submit-post-btn" class="w-full bg-red-700 hover:bg-red-800 text-white font-bold py-3 rounded-lg transition-colors">โพสต์ประกาศ</button>
             </div>
         </div>
     </div>
-    
     <!-- CHANGE PASSWORD MODAL -->
     <div id="change-password-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-[110] flex items-center justify-center p-4">
       <div class="bg-white rounded-xl shadow-2xl w-full max-w-xs p-6 relative">
@@ -1354,37 +1355,12 @@
         </div>
       </div>
     </div>
-    
     <!-- Footer -->
     <footer class="bg-gray-900 text-gray-400 py-10 mt-auto border-t border-gray-800 text-center text-sm">
         <p>© Wuerth Thailand. Internal Use Only.</p>
     </footer>
 
     <script>
-        // ==========================================
-        // 🛑 กรุณาใส่ URL ของ GOOGLE APPS SCRIPT WEB APP ที่ได้จากขั้นตอนที่แล้ว
-        // (ห้ามเป็น URL ที่ลงท้ายด้วย /dev ให้ใช้ /exec เท่านั้น)
-        // ==========================================
-        const API_URL = "https://script.google.com/macros/s/AKfycbw8NM6u6pTHD-iW7uEvDUtI-f3MA2fIvPcVCmHLIVG2LhsS0aI6Uw8FcNYyKqpUWWpQ/exec"; 
-        
-        // === ฟังก์ชันสำหรับยิง API ไปหา Apps Script ===
-        async function callBackend(action, payload = {}) {
-            try {
-                // ส่งเป็น Text/Plain เพื่อหลีกเลี่ยง CORS Preflight Request
-                const response = await fetch(API_URL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-                    body: JSON.stringify({ action: action, payload: payload })
-                });
-                const result = await response.json();
-                if (!result.success) throw new Error(result.error);
-                return result.data;
-            } catch (error) {
-                console.error("API Error:", error);
-                throw error;
-            }
-        }
-
         // === FIREBASE REALTIME SETUP ===
         const firebaseConfig = {
             apiKey: "AIzaSyA69fQ5DbaN9r3YfxEFoVLZnbANvTKYeOM",
@@ -1397,21 +1373,28 @@
             measurementId: "G-FG1QQHJ2EN"
         };
 
+        // Initialize Firebase Realtime Sync
         function initRealtimeSync() {
             if (!firebase.apps.length) {
                 try {
                     firebase.initializeApp(firebaseConfig);
                     const db = firebase.database();
+                    
+                    // 1. Listen for Main Announcement
                     db.ref('mainAnnouncement').on('value', (snapshot) => {
                         const data = snapshot.val();
                         if (data) renderAnnouncement(data);
                     });
+
+                    // 2. Listen for Posts
                     db.ref('posts').on('value', (snapshot) => {
                         const data = snapshot.val();
                         if (data) renderPosts(data);
                     });
+                    
+                    console.log("Firebase Realtime Listener Started");
                 } catch (e) {
-                    console.warn("Firebase Config Error:", e);
+                    console.warn("Firebase Config not set properly. Realtime features disabled.");
                 }
             }
         }
@@ -1419,15 +1402,15 @@
         // === STATE VARIABLES ===
         let isAdmin = false;
         let adminCreds = { user: '', pass: '' };
-        let editingPostId = null;
+        let editingPostId = null; // Track which post is being edited
 
         document.addEventListener('DOMContentLoaded', () => {
             lucide.createIcons();
-            fetchAllData(); 
-            initRealtimeSync(); 
+            fetchAllData(); // Fetch initial static data (contact info)
+            initRealtimeSync(); // Start listening for updates
             checkUrlLogin();
 
-            // Calculator Date Limit
+             // 3. Calculator Date Limit
             const dateInput = document.getElementById('start-date');
             if(dateInput) {
                 const today = new Date().toISOString().split('T')[0];
@@ -1435,17 +1418,23 @@
             }
         });
 
-        // === FETCH DATA (เชื่อมต่อ API แบบใหม่) ===
-        async function fetchAllData() {
-            try {
-                const data = await callBackend('getAllData');
-                if(data && data.contact) renderContact(data.contact);
-            } catch(e) {
-                // Fallback กรณี API พังหรือยังไม่ได้ตั้งค่า
-                renderContact({ phone: "094-480-1597", email: "Wadsana.Nonrucha@wuerth.co.th" });
+        // === FETCH DATA (Modified to handle split sources) ===
+        function fetchAllData() {
+            if (typeof google === 'undefined') {
+                // สำหรับตอนทดสอบ Local
+                renderContact({ phone: "02-123-4567", email: "test@test.com" });
+                return;
             }
+            // เรียกข้อมูลเบอร์โทร/อีเมล จาก Apps Script
+            google.script.run
+                .withSuccessHandler(function(data) {
+                    renderContact(data.contact);
+                })
+                .withFailureHandler(err => console.error(err))
+                .getAllData();
         }
 
+        // Separated Render Logic for Reuse
         function renderAnnouncement(main) {
             if(!main) return;
             document.getElementById('announcement-loading').classList.add('hidden');
@@ -1473,20 +1462,27 @@
         function renderPosts(posts) {
             const container = document.getElementById('additional-posts-container');
             container.innerHTML = '';
+            
+            // Ensure posts is an array
             const postsArray = Array.isArray(posts) ? posts : (posts ? Object.values(posts) : []);
 
+            // Sort: Pinned first, then by date desc
             postsArray.sort((a, b) => {
+                // If one is pinned and other isn't, pinned comes first
                 if (a.pinned && !b.pinned) return -1;
                 if (!a.pinned && b.pinned) return 1;
+                // If both same pinned status, sort by date desc
                 return new Date(b.date) - new Date(a.date);
             });
 
             postsArray.forEach(post => {
+                // Filter Hidden posts for non-admins
                 if (post.hidden && !isAdmin) return;
 
                 const dateObj = new Date(post.date);
                 const dateStr = dateObj.toLocaleDateString('th-TH', { day: 'numeric', month: 'short', year: 'numeric' });
                 
+                // Styles based on status
                 let cardClass = 'extra-card p-5 fade-in relative';
                 if (post.pinned) cardClass += ' card-pinned';
                 if (post.hidden) cardClass += ' card-hidden';
@@ -1494,6 +1490,7 @@
                 const card = document.createElement('div');
                 card.className = cardClass;
                 
+                // Admin Action Buttons
                 let adminControls = '';
                 if (isAdmin) {
                     adminControls = `
@@ -1525,6 +1522,7 @@
                     <div class="text-xs text-gray-400 border-t border-gray-100 pt-2 text-right">${dateStr}</div>
                     ${adminControls}
                 `;
+                // Add specific styling for images inside posts
                 const imgs = card.querySelectorAll('img');
                 imgs.forEach(img => img.style.maxWidth = '100%');
                 container.appendChild(card);
@@ -1532,22 +1530,26 @@
             lucide.createIcons();
         }
 
-        // === ADMIN LOGIC ===
-        async function checkUrlLogin() {
-            // ใช้ URLSearchParams แทน google.script.url เพื่อดึงค่าจาก Browser ตรงๆ
-            const urlParams = new URLSearchParams(window.location.search);
-            const u = urlParams.get('u');
-            const p = urlParams.get('p');
-            
-            if (u && p) {
-                try {
-                    const isValid = await callBackend('verifyLogin', { username: u, password: p });
-                    if (isValid) {
-                        adminCreds = { user: u, pass: p };
-                        setAdminMode(true);
-                    }
-                } catch(e) { console.error("Auto Login Error:", e); }
-            }
+        // === ADMIN LOGIC (อัปเดตระบบตรวจสอบ Error) ===
+        function checkUrlLogin() {
+            if (typeof google === 'undefined') return;
+            google.script.url.getLocation(function(location) {
+                const params = location.parameter;
+                if (params.u && params.p) {
+                    google.script.run
+                    .withSuccessHandler(function(isValid) {
+                        if (isValid) {
+                            adminCreds.user = params.u;
+                            adminCreds.pass = params.p;
+                            setAdminMode(true);
+                        }
+                    })
+                    .withFailureHandler(function(err) {
+                        console.error("Auto Login Error:", err);
+                    })
+                    .verifyLogin(params.u, params.p);
+                }
+            });
         }
 
         function handleAdminClick() {
@@ -1555,33 +1557,56 @@
             else document.getElementById('login-modal').classList.remove('hidden');
         }
 
-        async function submitLogin() {
+        // --- จุดที่มีการแก้ไขเพิ่มเติมเพื่อดักจับ Error เข้าสู่ระบบ ---
+        function submitLogin() {
             const u = document.getElementById('admin-user').value;
             const p = document.getElementById('admin-pass').value;
             const btn = document.getElementById('login-submit-btn');
 
-            if (!u || !p) { alert("กรุณากรอกข้อมูลให้ครบถ้วน"); return; }
+            if (!u || !p) {
+                alert("กรุณากรอกข้อมูลให้ครบถ้วน");
+                return;
+            }
 
+            // แสดงสถานะโหลด
+            const originalText = btn.innerText;
             btn.innerText = "กำลังตรวจสอบ...";
             document.body.style.cursor = 'wait';
             btn.disabled = true;
 
-            try {
-                const isValid = await callBackend('verifyLogin', { username: u, password: p });
-                if (isValid) { 
-                    adminCreds = { user: u, pass: p }; 
-                    setAdminMode(true); 
-                    closeLoginModal(); 
-                } else { 
-                    alert('Username หรือ Password ไม่ถูกต้อง'); 
-                }
-            } catch(e) {
-                alert('เกิดข้อผิดพลาดในการเชื่อมต่อเซิร์ฟเวอร์: ' + e.message + '\n\n*โปรดตรวจสอบว่าคุณได้ใส่ API_URL ที่ถูกต้องและ Deploy แบบ Web App อย่างถูกต้องหรือไม่');
-            } finally {
+            if (typeof google === 'undefined') {
+                // ทดสอบบน Local
                 document.body.style.cursor = 'default';
-                btn.innerText = "เข้าสู่ระบบ";
+                btn.innerText = originalText;
                 btn.disabled = false;
+                if (u === 'admin' && p === 'admin') { adminCreds = { user: u, pass: p }; setAdminMode(true); closeLoginModal(); }
+                else { alert('Username หรือ Password ไม่ถูกต้อง (Local Test)'); }
+                return;
             }
+
+            // เรียกตรวจสอบกับเซิร์ฟเวอร์
+            google.script.run
+                .withSuccessHandler(function(isValid) {
+                    document.body.style.cursor = 'default';
+                    btn.innerText = originalText;
+                    btn.disabled = false;
+                    
+                    if (isValid) { 
+                        adminCreds = { user: u, pass: p }; 
+                        setAdminMode(true); 
+                        closeLoginModal(); 
+                    } else { 
+                        alert('Username หรือ Password ไม่ถูกต้อง'); 
+                    }
+                })
+                .withFailureHandler(function(err) {
+                    // หาก Backend (code.gs) มี Error จะแจ้งเตือนตรงนี้
+                    document.body.style.cursor = 'default';
+                    btn.innerText = originalText;
+                    btn.disabled = false;
+                    alert('เกิดข้อผิดพลาดจากเซิร์ฟเวอร์:\n\n' + err.message + '\n\n*โปรดตรวจสอบไฟล์ code.gs ของคุณว่าลบโค้ดเดิมหมดแล้วหรือไม่');
+                })
+                .verifyLogin(u, p);
         }
 
         function setAdminMode(enabled) {
@@ -1590,17 +1615,17 @@
             if (enabled) {
                 btn.innerHTML = '<i data-lucide="pencil" class="w-4 h-4 text-red-600"></i>';
                 document.getElementById('contact-edit-btn').classList.remove('hidden');
-                document.getElementById('change-password-btn').classList.remove('hidden');
+                document.getElementById('change-password-btn').classList.remove('hidden'); // แสดงปุ่มเปลี่ยนรหัส
                 document.getElementById('admin-fab').classList.remove('hidden');
             }
             lucide.createIcons();
+            // Re-render to show admin controls if posts already loaded via Firebase
             const db = firebase.database();
             db.ref('posts').once('value').then(snapshot => {
                 const data = snapshot.val();
                 if(data) renderPosts(data);
             });
         }
-        
         function closeLoginModal() { document.getElementById('login-modal').classList.add('hidden'); }
 
         // === EDIT LOGIC ===
@@ -1614,58 +1639,54 @@
                 edit.classList.add('hidden'); display.classList.remove('hidden'); saveBtn.classList.add('hidden');
             }
         }
-
-        async function saveAnnouncement() {
+        function saveAnnouncement() {
             const t = document.getElementById('edit-topic').value;
             const b = document.getElementById('edit-body').value;
             const btn = document.getElementById('save-btn');
             btn.innerText = "...";
-            
-            try {
-                const res = await callBackend('saveMainAnnouncement', {
-                    username: adminCreds.user, password: adminCreds.pass, topic: t, body: b
-                });
-                if(res && res.success) {
+            if (typeof google === 'undefined') return;
+            google.script.run.withSuccessHandler((res) => {
+                if(res.success) {
+                    // Update UI locally immediately for responsiveness (Realtime will confirm later)
                     document.getElementById('ann-topic').innerText = t;
                     document.getElementById('ann-body').innerText = b;
                     toggleEditMode();
+                    btn.innerHTML = '<i data-lucide="save" class="w-4 h-4"></i> บันทึก';
                 }
-            } catch(e) { alert("Error: " + e.message); }
-            btn.innerHTML = '<i data-lucide="save" class="w-4 h-4"></i> บันทึก';
+            }).saveMainAnnouncement(adminCreds.user, adminCreds.pass, t, b);
         }
-
         function toggleContactEdit() {
             const display = document.getElementById('contact-display');
             const edit = document.getElementById('contact-edit');
             if (edit.classList.contains('hidden')) { display.classList.add('hidden'); edit.classList.remove('hidden'); }
             else { edit.classList.add('hidden'); display.classList.remove('hidden'); }
         }
-
-        async function saveContact() {
+        function saveContact() {
             const p = document.getElementById('edit-phone').value;
             const e = document.getElementById('edit-email').value;
-            try {
-                const res = await callBackend('saveContactInfo', {
-                    username: adminCreds.user, password: adminCreds.pass, phone: p, email: e
-                });
-                if(res && res.success) {
+            if (typeof google === 'undefined') return;
+            google.script.run.withSuccessHandler((res) => {
+                if(res.success) {
                     renderContact({phone: p, email: e});
                     toggleContactEdit();
                 }
-            } catch(err) { alert("Error: " + err.message); }
+            }).saveContactInfo(adminCreds.user, adminCreds.pass, p, e);
         }
 
         // === NEW POST & RICH TEXT ===
         function openNewPostModal() { 
-            editingPostId = null;
+            editingPostId = null; // Reset editing state
             document.getElementById('new-post-topic').value = ""; 
             document.getElementById('new-post-content').innerHTML = "";
             document.getElementById('submit-post-btn').innerText = "โพสต์ประกาศ";
             document.querySelector('#new-post-modal h3').innerText = "เพิ่มประกาศใหม่";
+            
             document.getElementById('new-post-modal').classList.remove('hidden'); 
+            document.getElementById('new-post-content').focus(); 
         }
 
         function openEditPost(id) {
+            // Find post data from current display (or fetch from Firebase)
             const db = firebase.database();
             db.ref('posts').once('value').then(snapshot => {
                 const posts = snapshot.val() || [];
@@ -1676,6 +1697,7 @@
                     document.getElementById('new-post-content').innerHTML = post.content;
                     document.getElementById('submit-post-btn').innerText = "บันทึกการแก้ไข";
                     document.querySelector('#new-post-modal h3').innerText = "แก้ไขประกาศ";
+                    
                     document.getElementById('new-post-modal').classList.remove('hidden');
                 }
             });
@@ -1684,144 +1706,153 @@
         function closeNewPostModal() { document.getElementById('new-post-modal').classList.add('hidden'); }
         function execCmd(command, value = null) { document.execCommand(command, false, value); document.getElementById('new-post-content').focus(); }
         
-        function triggerImageUpload() { document.getElementById('img-input').click(); }
+        // --- Image Upload Logic ---
+        function triggerImageUpload() {
+            document.getElementById('img-input').click();
+        }
 
         function handleImageUpload(e) {
             const file = e.target.files[0];
             if (!file) return;
 
+            // Show loading state cursor
             document.body.style.cursor = 'wait';
+            
             const reader = new FileReader();
-            reader.onload = async function(e) {
-                const rawData = e.target.result;
+            reader.onload = function(e) {
+                const rawData = e.target.result; // data:image/jpeg;base64,.....
                 const base64Data = rawData.split(',')[1];
                 const mimeType = rawData.split(';')[0].split(':')[1];
                 
-                try {
-                    const res = await callBackend('uploadImageToDrive', {
-                        username: adminCreds.user, password: adminCreds.pass, data: base64Data, mimeType: mimeType, fileName: file.name
-                    });
-                    if (res && res.success) {
+                if (typeof google === 'undefined') {
+                    // Test mode
+                    document.execCommand('insertImage', false, rawData);
+                    document.body.style.cursor = 'default';
+                    return;
+                }
+
+                google.script.run.withSuccessHandler(function(res) {
+                    document.body.style.cursor = 'default';
+                    if (res.success) {
+                        // Insert image with max-width style
                         const imgHtml = `<img src="${res.url}" style="max-width: 100%; border-radius: 8px; margin: 10px 0;">`;
                         document.execCommand('insertHTML', false, imgHtml);
+                    } else {
+                        alert('เกิดข้อผิดพลาดในการอัปโหลดรูปภาพ: ' + res.error);
                     }
-                } catch(err) {
-                    alert('Upload Error: ' + err.message);
-                } finally {
-                    document.body.style.cursor = 'default';
-                }
+                }).uploadImageToDrive(adminCreds.user, adminCreds.pass, base64Data, mimeType, file.name);
             }
             reader.readAsDataURL(file);
         }
 
-        async function submitNewPost() {
+        // --- UPDATED SUBMIT LOGIC FOR DIRECT FIREBASE WRITE ---
+        function submitNewPost() {
              const topic = document.getElementById('new-post-topic').value;
              const content = document.getElementById('new-post-content').innerHTML;
              const btn = document.getElementById('submit-post-btn');
 
             if (!topic) { alert("กรุณาใส่หัวข้อ"); return; }
 
-            btn.innerText = "กำลังบันทึก...";
-            document.body.style.cursor = 'wait';
+        // เปลี่ยนสถานะปุ่ม
+        btn.innerText = "กำลังบันทึก...";
+        document.body.style.cursor = 'wait';
 
-            const postData = { id: editingPostId, topic: topic, content: content };
+       // เตรียมข้อมูลส่งไป Backend
+      // editingPostId จะเป็น null ถ้าสร้างใหม่, หรือเป็นรหัสถ้ากดแก้ไข (ระบบเดิมคุณทำไว้ดีแล้ว)
+      const postData = {
+        id: editingPostId, 
+        topic: topic,
+        content: content
+      };
 
-            try {
-                const res = await callBackend('savePostServer', {
-                    username: adminCreds.user, password: adminCreds.pass, postData: postData
-                });
-                if (res && res.success) closeNewPostModal();
-            } catch(err) {
-                alert("เกิดข้อผิดพลาด: " + err.message);
-            } finally {
-                document.body.style.cursor = 'default';
+      // เรียก Google Apps Script ให้ทำงานแทน
+       google.script.run
+          .withSuccessHandler(function(res) {
+            document.body.style.cursor = 'default';
+            if (res.success) {
+                closeNewPostModal();
+                // รีเซ็ตปุ่มเป็นข้อความเดิม (เผื่อเปิดใช้ครั้งหน้า)
                 btn.innerText = editingPostId ? "บันทึกการแก้ไข" : "โพสต์ประกาศ"; 
+                console.log("Save Success");
             }
-        }
+          })
+          .withFailureHandler(function(err) {
+            document.body.style.cursor = 'default';
+            console.error(err);
+            alert("เกิดข้อผิดพลาด: " + err.message);
+            btn.innerText = "ลองใหม่อีกครั้ง";
+          })
+         .savePostServer(adminCreds.user, adminCreds.pass, postData);
+       }
 
-        async function togglePin(id, currentStatus) {
-           await updatePostFieldServer(id, 'pinned', !currentStatus);
-        }
+        // --- NEW HELPER FUNCTIONS FOR PIN/HIDE ---
+                    // ฟังก์ชัน Pin/Unpin (ส่งงานให้ Backend ทำ)
+      function togglePin(id, currentStatus) {
+           updatePostFieldServer(id, 'pinned', !currentStatus);
+      }
 
-        async function toggleHide(id, currentStatus) {
-          await updatePostFieldServer(id, 'hidden', !currentStatus);
-        }
+          // ฟังก์ชัน Hide/Show (ส่งงานให้ Backend ทำ)
+      function toggleHide(id, currentStatus) {
+          updatePostFieldServer(id, 'hidden', !currentStatus);
+      }
 
-        async function updatePostFieldServer(id, field, value) {
+          // ตัวกลางส่งข้อมูลไปหา Google Apps Script
+      function updatePostFieldServer(id, field, value) {
+          // แสดงสถานะว่ากำลังทำงาน (เปลี่ยน cursor เป็น wait)
           document.body.style.cursor = 'wait';
-          try {
-              await callBackend('updatePostStatus', {
-                  username: adminCreds.user, password: adminCreds.pass, postId: id, field: field, value: value
-              });
-          } catch(err) { alert("Error: " + err.message); }
-          finally { document.body.style.cursor = 'default'; }
-        }
 
-        async function deletePost(id) {
-            if(!confirm("ต้องการลบประกาศนี้ใช่หรือไม่?")) return;
-            document.body.style.cursor = 'wait';
-            try {
-                await callBackend('deletePostServer', {
-                    username: adminCreds.user, password: adminCreds.pass, postId: id
-                });
-            } catch(err) { alert("ลบไม่สำเร็จ: " + err.message); }
-            finally { document.body.style.cursor = 'default'; }
-        }
-
-        // === PASSWORD CHANGE ===
-        function openChangePasswordModal() {
-            document.getElementById('new-admin-user').value = adminCreds.user;
-            document.getElementById('new-admin-pass').value = ''; 
-            document.getElementById('change-password-modal').classList.remove('hidden');
-         }
-
-        function closeChangePasswordModal() { document.getElementById('change-password-modal').classList.add('hidden'); }
-
-        async function submitChangePassword() {
-            const newU = document.getElementById('new-admin-user').value;
-            const newP = document.getElementById('new-admin-pass').value;
-            const btn = document.getElementById('btn-submit-password');
-
-            if(!newU || !newP) { alert("กรุณากรอกข้อมูลให้ครบถ้วน"); return; }
-            if(!confirm("คุณแน่ใจหรือไม่ว่าจะเปลี่ยนรหัสผ่านแอดมิน?")) return;
-
-            btn.innerText = "กำลังบันทึก...";
-            document.body.style.cursor = 'wait';
-
-            try {
-                const res = await callBackend('updateAdminCredentials', {
-                    oldUser: adminCreds.user, oldPass: adminCreds.pass, newUser: newU, newPass: newP
-                });
-                if(res && res.success) {
-                    alert("เปลี่ยนรหัสผ่านสำเร็จ!");
-                    adminCreds.user = newU;
-                    adminCreds.pass = newP;
-                    closeChangePasswordModal();
-                }
-            } catch(err) { alert("Error: " + err.message); }
-            finally {
-                document.body.style.cursor = 'default';
-                btn.innerText = "บันทึกรหัสผ่านใหม่";
+          google.script.run
+         .withSuccessHandler(function(res) {
+         document.body.style.cursor = 'default';
+            if (res.success) {
+                console.log("Update Success");
+                // ไม่ต้องทำอะไรเพิ่ม เพราะ Firebase Realtime Listener จะอัปเดตหน้าจอให้เอง
             }
+        })
+        .withFailureHandler(function(err) {
+            document.body.style.cursor = 'default';
+            alert("เกิดข้อผิดพลาด: " + err.message);
+        })
+         .updatePostStatus(adminCreds.user, adminCreds.pass, id, field, value);
         }
-        
-        // === NAVIGATION & CALCULATOR LOGIC ===
+
+            // ฟังก์ชันลบ (ส่งงานให้ Backend ทำ)
+        function deletePost(id) {
+            if(!confirm("ต้องการลบประกาศนี้ใช่หรือไม่?")) return;
+    
+              document.body.style.cursor = 'wait';
+
+              google.script.run
+             .withSuccessHandler(function(res) {
+              document.body.style.cursor = 'default';
+              console.log("Delete Success");
+            })
+            .withFailureHandler(function(err) {
+             document.body.style.cursor = 'default';
+             alert("ลบไม่สำเร็จ: " + err.message);
+            })
+             .deletePostServer(adminCreds.user, adminCreds.pass, id);
+        }
+
+        // === NAVIGATION & CALCULATOR (Fixed Effect Logic) ===
         function filterContent(tab) {
             document.querySelectorAll('.content-section').forEach(el => el.classList.add('hidden'));
             document.getElementById(tab + '-section').classList.remove('hidden');
             
+            // Update Active State for Desktop Buttons
             document.querySelectorAll('.nav-btn').forEach(btn => {
                 const isActive = btn.dataset.tab === tab;
                 if(isActive) {
                     btn.classList.remove('text-gray-600', 'hover:text-red-700', 'hover:bg-gray-50');
-                    btn.classList.add('bg-red-50', 'text-red-700', 'ring-2', 'ring-red-200'); 
-                    if(tab === 'home') btn.classList.add('border-red-100'); 
+                    btn.classList.add('bg-red-50', 'text-red-700', 'ring-2', 'ring-red-200'); // Add ring
+                    if(tab === 'home') btn.classList.add('border-red-100'); // Ensure border for home if needed
                 } else {
                     btn.classList.remove('bg-red-50', 'text-red-700', 'ring-2', 'ring-red-200', 'border-red-100');
                     btn.classList.add('text-gray-600', 'hover:text-red-700', 'hover:bg-gray-50');
                 }
             });
 
+            // Update Active State for Mobile Buttons (Restored)
             document.querySelectorAll('.mobile-nav-btn').forEach(btn => {
                 if(btn.dataset.tab === tab) {
                     btn.classList.remove('text-gray-600');
@@ -1832,6 +1863,7 @@
                 }
             });
 
+            // Close Mobile Menu if open
             document.getElementById('mobile-menu').classList.add('hidden');
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
@@ -1843,7 +1875,6 @@
             if (content.classList.contains('hidden')) { icon.style.transform = 'rotate(0deg)'; icon.classList.remove('rotate-180'); }
             else { icon.style.transform = 'rotate(180deg)'; icon.classList.add('rotate-180'); }
         }
-
         function toggleMobileMenu() { document.getElementById('mobile-menu').classList.toggle('hidden'); }
 
         function calculateLeave() {
@@ -1912,6 +1943,53 @@
         }
 
         filterContent('home');
+
+        // --- ADMIN SETTINGS LOGIC ---
+
+        function openChangePasswordModal() {
+            document.getElementById('new-admin-user').value = adminCreds.user; // แนะนำ user เดิมให้
+            document.getElementById('new-admin-pass').value = ''; // ว่าง password ไว้
+            document.getElementById('change-password-modal').classList.remove('hidden');
+         }
+
+        function closeChangePasswordModal() {
+            document.getElementById('change-password-modal').classList.add('hidden');
+         }
+
+        function submitChangePassword() {
+            const newU = document.getElementById('new-admin-user').value;
+            const newP = document.getElementById('new-admin-pass').value;
+            const btn = document.getElementById('btn-submit-password');
+
+            if(!newU || !newP) {
+               alert("กรุณากรอกข้อมูลให้ครบถ้วน");
+               return;
+            }
+
+            if(!confirm("คุณแน่ใจหรือไม่ว่าจะเปลี่ยนรหัสผ่านแอดมิน? โปรดจดจำรหัสผ่านใหม่ให้ดี")) return;
+
+            btn.innerText = "กำลังบันทึก...";
+            document.body.style.cursor = 'wait';
+
+            google.script.run
+             .withSuccessHandler(function(res) {
+                 document.body.style.cursor = 'default';
+                 if (res.success) {
+                    alert("เปลี่ยนรหัสผ่านสำเร็จ! กรุณาใช้รหัสผ่านใหม่ในการเข้าสู่ระบบครั้งหน้า");
+                    // อัปเดต Creds ในหน่วยความจำปัจจุบัน
+                    adminCreds.user = newU;
+                    adminCreds.pass = newP;
+                    closeChangePasswordModal();
+                    btn.innerText = "บันทึกรหัสผ่านใหม่";
+                }
+            })
+            .withFailureHandler(function(err) {
+                document.body.style.cursor = 'default';
+                alert("เกิดข้อผิดพลาด: " + err.message);
+                btn.innerText = "บันทึกรหัสผ่านใหม่";
+            })
+            .updateAdminCredentials(adminCreds.user, adminCreds.pass, newU, newP);
+        }
     </script>
 </body>
 </html>
