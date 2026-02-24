@@ -13,6 +13,9 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
     
+    <!-- นำเข้าไฟล์ระบบภาษา -->
+    <script src="lang.js"></script>
+    
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;700&display=swap');
         body { font-family: 'Sarabun', sans-serif; }
@@ -54,9 +57,7 @@
         /* New Post Card Style */
         .extra-card { background: white; border-radius: 0.75rem; box-shadow: 0 2px 5px rgba(0,0,0,0.05); border: 1px solid #f3f4f6; margin-bottom: 1rem; overflow: hidden; transition: transform 0.2s; }
         .extra-card:hover { transform: translateY(-2px); box-shadow: 0 4px 10px rgba(0,0,0,0.08); }
-        .button-wrapper::before { animation: spin-gradient 4s linear infinite; }
-        @keyframes spin-gradient { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-
+        
         /* Pinned & Hidden Styles */
         .card-pinned { border: 2px solid #fbbf24; background: linear-gradient(to bottom right, #fffbeb, #ffffff); }
         .card-hidden { opacity: 0.6; background-color: #f3f4f6; border: 1px dashed #9ca3af; }
@@ -69,30 +70,46 @@
     <header class="bg-white shadow-sm sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
+                <!-- Logo -->
                 <div onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="flex items-center gap-2 sm:gap-3 overflow-hidden cursor-pointer">
                     <img src="https://www.wuerth.co.th/media/system/layout_wl2bootstrap/bootstrap_system_images/wuerth_logo_big.png" alt="Wuerth Logo" class="h-6 sm:h-8 w-auto flex-shrink-0">
-                    <div class="hidden sm:block h-6 w-px bg-gray-300"></div>
+                    <div class="h-6 w-px bg-gray-300"></div>
                 </div>
-                <!-- Desktop Nav -->
-                <div class="hidden lg:flex space-x-1">
-                    <button onclick="filterContent('home')" class="nav-btn px-3 py-2 rounded-md text-sm font-medium transition-colors bg-red-50 text-red-700 border border-red-100 hover:bg-red-100 ring-2 ring-red-200" data-tab="home"><i data-lucide="home" class="w-4 h-4 inline mr-1"></i>หน้าหลัก</button>
-                    <button onclick="filterContent('policy')" class="nav-btn px-3 py-2 rounded-md text-sm font-medium transition-colors text-gray-600 hover:text-red-700 hover:bg-gray-50" data-tab="policy"><i data-lucide="clipboard-list" class="w-4 h-4 inline mr-1"></i>สิทธิการลา</button>
-                    <button onclick="filterContent('manual')" class="nav-btn px-3 py-2 rounded-md text-sm font-medium transition-colors text-gray-600 hover:text-red-700 hover:bg-gray-50" data-tab="manual"><i data-lucide="book" class="w-4 h-4 inline mr-1"></i>คู่มือพนักงาน</button>
-                    <button onclick="filterContent('calculator')" class="nav-btn px-3 py-2 rounded-md text-sm font-medium transition-colors text-gray-600 hover:text-red-700 hover:bg-gray-50" data-tab="calculator"><i data-lucide="calculator" class="w-4 h-4 inline mr-1"></i>คำนวณสิทธิ</button>
+                
+                <!-- ขวา: เมนูภาษา และ Hamburger Menu -->
+                <div class="flex items-center gap-2 sm:gap-4">
+                    
+                    <!-- Language Switcher Dropdown -->
+                    <div class="relative">
+                        <button onclick="toggleLangMenu(event)" class="flex items-center gap-1.5 px-3 py-1.5 border-[1.5px] border-gray-700 rounded-full text-sm font-medium text-gray-800 hover:bg-gray-100 transition-colors focus:outline-none">
+                            <i data-lucide="globe" class="w-4 h-4"></i>
+                            <span id="current-lang-text">English</span>
+                            <i data-lucide="chevron-down" class="w-4 h-4"></i>
+                        </button>
+                        
+                        <!-- Panel ภาษา -->
+                        <div id="lang-menu" class="hidden absolute right-0 mt-2 w-32 bg-white rounded-xl shadow-lg border border-gray-100 z-50 overflow-hidden">
+                            <button onclick="setLanguage('en')" class="block w-full text-left px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 hover:text-red-700 font-medium">English</button>
+                            <button onclick="setLanguage('th')" class="block w-full text-left px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 hover:text-red-700 font-medium border-t border-gray-100">ไทย</button>
+                        </div>
+                    </div>
+
+                    <!-- Main Menu Dropdown (Hamburger) -->
+                    <div class="relative">
+                        <button onclick="toggleMainMenu(event)" class="text-gray-800 focus:outline-none p-2 rounded-md hover:bg-gray-100 transition-colors">
+                            <i data-lucide="menu" id="menu-icon" class="w-6 h-6"></i>
+                        </button>
+                        
+                        <!-- Panel เมนูหลัก -->
+                        <div id="main-menu" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg border border-gray-100 z-50 overflow-hidden">
+                            <button onclick="filterContent('home')" class="nav-btn block w-full text-left px-4 py-3 text-sm font-medium bg-red-50 text-red-700" data-tab="home" data-i18n="nav_home">หน้าหลัก</button>
+                            <button onclick="filterContent('policy')" class="nav-btn block w-full text-left px-4 py-3 text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-red-700" data-tab="policy" data-i18n="nav_policy">สิทธิการลา</button>
+                            <button onclick="filterContent('manual')" class="nav-btn block w-full text-left px-4 py-3 text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-red-700" data-tab="manual" data-i18n="nav_manual">คู่มือพนักงาน</button>
+                            <button onclick="filterContent('calculator')" class="nav-btn block w-full text-left px-4 py-3 text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-red-700" data-tab="calculator" data-i18n="nav_calc">คำนวณสิทธิวันลา</button>
+                        </div>
+                    </div>
+
                 </div>
-                <!-- Mobile Menu Button -->
-                <div class="lg:hidden">
-                    <button onclick="toggleMobileMenu()" class="text-gray-600 focus:outline-none p-2 rounded-md hover:bg-gray-100"><i data-lucide="menu" id="menu-icon"></i></button>
-                </div>
-            </div>
-        </div>
-        <!-- Mobile Nav Menu -->
-        <div id="mobile-menu" class="hidden lg:hidden bg-white border-t border-gray-100 shadow-lg absolute w-full z-50">
-            <div class="px-4 pt-2 pb-4 space-y-2">
-                <button onclick="filterContent('home')" class="mobile-nav-btn block w-full text-left px-4 py-3 rounded-lg text-base font-medium bg-red-50 text-red-700 border border-red-100" data-tab="home">หน้าหลัก</button>
-                <button onclick="filterContent('policy')" class="mobile-nav-btn block w-full text-left px-4 py-3 rounded-lg text-base font-medium text-gray-600" data-tab="policy">สิทธิการลา</button>
-                <button onclick="filterContent('manual')" class="mobile-nav-btn block w-full text-left px-4 py-3 rounded-lg text-base font-medium text-gray-600" data-tab="manual">คู่มือพนักงาน</button>
-                <button onclick="filterContent('calculator')" class="mobile-nav-btn block w-full text-left px-4 py-3 rounded-lg text-base font-medium text-gray-600" data-tab="calculator">คำนวณสิทธิวันลา</button>
             </div>
         </div>
     </header>
@@ -103,9 +120,9 @@
         <section id="home-section" class="content-section fade-in mb-8">
             <div class="mb-6 sm:mb-8 text-center sm:text-left">
                 <h1 class="text-2xl sm:text-3xl font-extrabold text-gray-900 tracking-tight">
-                    <span class="text-red-700">Wurth</span> Employee Service
+                    <span class="text-red-700">Wurth</span> <span data-i18n="home_title">Employee Service</span>
                 </h1>
-                <p class="text-gray-500 mt-2 text-sm sm:text-base">ยินดีต้อนรับสู่ระบบบริการข้อมูลพนักงานและสวัสดิการ</p>
+                <p class="text-gray-500 mt-2 text-sm sm:text-base" data-i18n="home_subtitle">ยินดีต้อนรับสู่ระบบบริการข้อมูลพนักงานและสวัสดิการ</p>
             </div>
 
             <!-- CONTACT SECTION (EDITABLE) -->
@@ -118,20 +135,20 @@
                         <div class="flex justify-between items-start">
                             <h3 class="text-lg lg:text-xl font-bold mb-2 flex items-center gap-2">
                                 <div class="bg-red-600 p-1.5 rounded-lg lg:hidden"><i data-lucide="file-text" class="w-4 h-4 text-white"></i></div>
-                                ช่องทางการติดต่อ
+                                <span data-i18n="contact_title">ช่องทางการติดต่อ</span>
                             </h3>
                             <!-- ปุ่มแก้ไขข้อมูลติดต่อ (แสดงเมื่อ Login) -->
                             <div class="flex gap-2">
                                <button onclick="openChangePasswordModal()" id="change-password-btn" class="hidden text-gray-400 hover:text-white p-1 text-xs items-center gap-1 border border-gray-600 rounded px-2">
-                                  <i data-lucide="key" class="w-3 h-3"></i> เปลี่ยนรหัสแอดมิน
+                                  <i data-lucide="key" class="w-3 h-3"></i> <span data-i18n="btn_change_pass">เปลี่ยนรหัสแอดมิน</span>
                                </button>
                                <button onclick="toggleContactEdit()" id="contact-edit-btn" class="hidden text-gray-400 hover:text-white p-1 border border-gray-600 rounded px-2 text-xs flex items-center gap-1">
-                                  <i data-lucide="pencil" class="w-3 h-3"></i> แก้ไขการติดต่อ
+                                  <i data-lucide="pencil" class="w-3 h-3"></i> <span data-i18n="btn_edit_contact">แก้ไขการติดต่อ</span>
                                </button>
                             </div>
                         </div>
 
-                        <p class="text-gray-300 text-sm mb-4 mt-0 leading-relaxed">
+                        <p class="text-gray-300 text-sm mb-4 mt-0 leading-relaxed" data-i18n="contact_desc">
                             หากมีข้อสงสัย คำถามเพิ่มเติม หรือพบปัญหาใด ๆ สามารถติดต่อสอบถามได้โดยตรง
                         </p>
                         
@@ -149,7 +166,7 @@
                         <div id="contact-edit" class="hidden flex flex-col sm:flex-row gap-3 w-full">
                             <input type="text" id="edit-phone" placeholder="เบอร์โทรศัพท์" class="text-black px-4 py-2 rounded-lg text-sm border border-gray-300 w-full sm:w-auto">
                             <input type="text" id="edit-email" placeholder="อีเมล" class="text-black px-4 py-2 rounded-lg text-sm border border-gray-300 w-full sm:w-auto">
-                            <button onclick="saveContact()" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg text-sm font-bold">บันทึก</button>
+                            <button onclick="saveContact()" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg text-sm font-bold" data-i18n="btn_save">บันทึก</button>
                         </div>
                     </div>
                 </div>
@@ -162,13 +179,13 @@
                     <div class="flex items-center justify-between mb-4">
                         <div class="flex items-center gap-3">
                             <div class="p-2 bg-red-100 rounded-lg text-red-600"><i data-lucide="megaphone" class="w-6 h-6"></i></div>
-                            <h2 class="text-xl sm:text-2xl font-bold text-gray-800">ประกาศจากฝ่ายบุคคล</h2>
+                            <h2 class="text-xl sm:text-2xl font-bold text-gray-800" data-i18n="announcement_title">ประกาศจากฝ่ายบุคคล</h2>
                             <button onclick="handleAdminClick()" id="admin-btn" class="text-gray-300 hover:text-red-500 transition-colors p-1 rounded-full focus:outline-none">
                                 <i data-lucide="lock" id="admin-icon" class="w-4 h-4"></i>
                             </button>
                         </div>
                         <button onclick="saveAnnouncement()" id="save-btn" class="hidden bg-red-600 text-white px-4 py-2 rounded-lg text-sm font-bold shadow-md hover:bg-red-700 transition-all flex items-center gap-2">
-                            <i data-lucide="save" class="w-4 h-4"></i> บันทึก
+                            <i data-lucide="save" class="w-4 h-4"></i> <span data-i18n="btn_save">บันทึก</span>
                         </button>
                     </div>
 
@@ -187,8 +204,8 @@
                     </div>
 
                     <div id="announcement-edit" class="hidden space-y-3">
-                        <div><label class="text-xs text-gray-500 font-bold">หัวข้อประกาศ:</label><input type="text" id="edit-topic" class="editable-input text-lg font-bold text-red-700"></div>
-                        <div><label class="text-xs text-gray-500 font-bold">เนื้อหา:</label><textarea id="edit-body" class="editable-textarea text-gray-600 text-sm leading-relaxed" rows="5"></textarea></div>
+                        <div><label class="text-xs text-gray-500 font-bold" data-i18n="announcement_topic_label">หัวข้อประกาศ:</label><input type="text" id="edit-topic" class="editable-input text-lg font-bold text-red-700"></div>
+                        <div><label class="text-xs text-gray-500 font-bold" data-i18n="announcement_body_label">เนื้อหา:</label><textarea id="edit-body" class="editable-textarea text-gray-600 text-sm leading-relaxed" rows="5"></textarea></div>
                     </div>
                 </div>
             </div>
@@ -202,15 +219,15 @@
             <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
                 <button onclick="filterContent('policy')" class="p-4 bg-white rounded-xl shadow-sm hover:shadow-md transition-all border border-gray-100 hover:border-red-200 group text-left">
                     <div class="p-2 bg-blue-50 text-blue-600 rounded-lg w-fit mb-3 group-hover:scale-110 transition-transform"><i data-lucide="clipboard-list" class="w-6 h-6"></i></div>
-                    <span class="font-bold text-gray-800 block">สิทธิการลา</span>
+                    <span class="font-bold text-gray-800 block" data-i18n="nav_policy">สิทธิการลา</span>
                 </button>
                 <button onclick="filterContent('manual')" class="p-4 bg-white rounded-xl shadow-sm hover:shadow-md transition-all border border-gray-100 hover:border-red-200 group text-left">
                     <div class="p-2 bg-orange-50 text-orange-600 rounded-lg w-fit mb-3 group-hover:scale-110 transition-transform"><i data-lucide="book" class="w-6 h-6"></i></div>
-                    <span class="font-bold text-gray-800 block">คู่มือพนักงาน</span>
+                    <span class="font-bold text-gray-800 block" data-i18n="nav_manual">คู่มือพนักงาน</span>
                 </button>
                  <button onclick="filterContent('calculator')" class="p-4 bg-white rounded-xl shadow-sm hover:shadow-md transition-all border border-gray-100 hover:border-red-200 group text-left col-span-2 sm:col-span-1">
                     <div class="p-2 bg-green-50 text-green-600 rounded-lg w-fit mb-3 group-hover:scale-110 transition-transform"><i data-lucide="calculator" class="w-6 h-6"></i></div>
-                    <span class="font-bold text-gray-800 block">คำนวณสิทธิ</span>
+                    <span class="font-bold text-gray-800 block" data-i18n="nav_calc">คำนวณสิทธิ</span>
                 </button>
             </div>
         </section>
@@ -222,8 +239,8 @@
                     <i data-lucide="clipboard-list" class="w-5 h-5 sm:w-6 sm:h-6"></i>
                 </div>
                 <div>
-                    <h2 class="text-lg sm:text-2xl font-bold text-gray-800">สิทธิการลา</h2>
-                    <p class="text-xs sm:text-sm text-gray-500">ระเบียบการลาประเภทต่างๆ ของบริษัท</p>
+                    <h2 class="text-lg sm:text-2xl font-bold text-gray-800" data-i18n="nav_policy">สิทธิการลา</h2>
+                    <p class="text-xs sm:text-sm text-gray-500" data-i18n="policy_sub">ระเบียบการลาประเภทต่างๆ ของบริษัท</p>
                 </div>
             </div>
             <!-- Policy Accordion Container -->
@@ -233,7 +250,7 @@
                     <button onclick="toggleAccordion('policy-vacation')" class="w-full px-4 py-3 sm:px-6 sm:py-4 flex items-center justify-between bg-white hover:bg-red-50 transition-colors">
                         <div class="flex items-center gap-3">
                             <div class="p-1.5 sm:p-2 rounded-lg bg-red-50 text-red-700"><i data-lucide="palmtree" class="w-4 h-4 sm:w-5 sm:h-5"></i></div>
-                            <span class="font-bold text-base sm:text-lg text-gray-800">สิทธิวันหยุดพักผ่อนประจำปี</span>
+                            <span class="font-bold text-base sm:text-lg text-gray-800" data-i18n="vac_title">สิทธิวันหยุดพักผ่อนประจำปี</span>
                         </div>
                         <i data-lucide="chevron-down" id="icon-policy-vacation" class="w-5 h-5 text-gray-400 transition-transform duration-300 rotate-180"></i>
                     </button>
@@ -242,63 +259,63 @@
                             <!-- Card 1 -->
                             <div class="bg-white rounded-xl shadow-sm border-t-4 border-red-700 p-4 sm:p-5 w-full">
                                 <div class="flex justify-between items-start mb-4">
-                                    <h3 class="text-base sm:text-lg font-bold text-gray-800">เงื่อนไขทั่วไป</h3>
+                                    <h3 class="text-base sm:text-lg font-bold text-gray-800" data-i18n="vac_cond">เงื่อนไขทั่วไป</h3>
                                     <span class="bg-red-50 text-red-700 text-[10px] font-bold px-2 py-1 rounded-full border border-red-200 uppercase">Pro-rate</span>
                                 </div>
                                 <div class="space-y-3 text-gray-600 text-sm">
                                     <div class="flex items-start gap-3">
                                         <i data-lucide="check-circle" class="w-4 h-4 text-red-600 mt-0.5 flex-shrink-0"></i>
-                                        <span><span class="font-semibold text-gray-900">พนักงานใหม่:</span> ได้สิทธิแบบเฉลี่ย (Pro-rate) หลังผ่านทดลองงาน</span>
+                                        <span data-i18n="vac_cond_1"><span class="font-semibold text-gray-900">พนักงานใหม่:</span> ได้สิทธิแบบเฉลี่ย (Pro-rate) หลังผ่านทดลองงาน</span>
                                     </div>
                                     <div class="flex items-start gap-3">
                                         <i data-lucide="check-circle" class="w-4 h-4 text-red-600 mt-0.5 flex-shrink-0"></i>
-                                        <span><span class="font-semibold text-gray-900">ช่วงทดลองงาน:</span> ใช้สิทธิได้เฉพาะกรณี <span class="underline text-red-800">ฉุกเฉิน</span> เท่านั้น</span>
+                                        <span data-i18n="vac_cond_2"><span class="font-semibold text-gray-900">ช่วงทดลองงาน:</span> ใช้สิทธิได้เฉพาะกรณี <span class="underline text-red-800">ฉุกเฉิน</span> เท่านั้น</span>
                                     </div>
                                     <div class="flex items-start gap-3">
                                         <i data-lucide="check-circle" class="w-4 h-4 text-red-600 mt-0.5 flex-shrink-0"></i>
-                                        <span><span class="font-semibold text-gray-900">โอนวันลา:</span> ได้สูงสุด 5 วัน (ใช้ภายใน 4 เดือนแรกของปีถัดไป)</span>
+                                        <span data-i18n="vac_cond_3"><span class="font-semibold text-gray-900">โอนวันลา:</span> ได้สูงสุด 5 วัน (ใช้ภายใน 4 เดือนแรกของปีถัดไป)</span>
                                     </div>
                                 </div>
                             </div>
                             <!-- Card 2 -->
                             <div class="bg-white rounded-xl shadow-sm border-t-4 border-red-700 p-4 sm:p-5 w-full">
                                 <div class="flex justify-between items-start mb-4">
-                                    <h3 class="text-base sm:text-lg font-bold text-gray-800">ตารางสิทธิวันลา</h3>
+                                    <h3 class="text-base sm:text-lg font-bold text-gray-800" data-i18n="vac_table_title">ตารางสิทธิวันลา</h3>
                                     <span class="bg-red-50 text-red-700 text-[10px] font-bold px-2 py-1 rounded-full border border-red-200 uppercase">Service Years</span>
                                 </div>
                                 <div class="space-y-3 text-gray-600 text-sm">
                                     <div class="flex justify-between items-center border-b border-gray-50 pb-2">
-                                        <span class="text-gray-500">อายุงาน &lt; 2 ปี</span>
-                                        <span class="font-bold text-red-700 bg-red-50 px-2 py-0.5 rounded">14 วัน</span>
+                                        <span class="text-gray-500" data-i18n="vac_yr_1">อายุงาน &lt; 2 ปี</span>
+                                        <span class="font-bold text-red-700 bg-red-50 px-2 py-0.5 rounded" data-i18n="vac_day_14">14 วัน</span>
                                     </div>
                                     <div class="flex justify-between items-center border-b border-gray-50 pb-2">
-                                        <span class="text-gray-500">อายุงาน 2 - &lt; 5 ปี</span>
-                                        <span class="font-bold text-red-700 bg-red-50 px-2 py-0.5 rounded">17 วัน</span>
+                                        <span class="text-gray-500" data-i18n="vac_yr_2">อายุงาน 2 - &lt; 5 ปี</span>
+                                        <span class="font-bold text-red-700 bg-red-50 px-2 py-0.5 rounded" data-i18n="vac_day_17">17 วัน</span>
                                     </div>
                                     <div class="flex justify-between items-center">
-                                        <span class="text-gray-500">อายุงาน &ge; 5 ปี / บริหาร</span>
-                                        <span class="font-bold text-red-700 bg-red-50 px-2 py-0.5 rounded">19 วัน</span>
+                                        <span class="text-gray-500" data-i18n="vac_yr_3">อายุงาน &ge; 5 ปี / บริหาร</span>
+                                        <span class="font-bold text-red-700 bg-red-50 px-2 py-0.5 rounded" data-i18n="vac_day_19">19 วัน</span>
                                     </div>
                                 </div>
                             </div>
                             <!-- Card 3 -->
                             <div class="bg-white rounded-xl shadow-sm border-t-4 border-red-700 p-4 sm:p-5 w-full">
                                 <div class="flex justify-between items-start mb-4">
-                                    <h3 class="text-base sm:text-lg font-bold text-gray-800">ระเบียบการยื่นใบลา</h3>
+                                    <h3 class="text-base sm:text-lg font-bold text-gray-800" data-i18n="vac_rule_title">ระเบียบการยื่นใบลา</h3>
                                     <span class="bg-red-50 text-red-700 text-[10px] font-bold px-2 py-1 rounded-full border border-red-200 uppercase">Important</span>
                                 </div>
                                 <div class="space-y-3 text-gray-600 text-sm">
                                     <div class="flex items-start gap-3">
                                         <i data-lucide="clock" class="w-4 h-4 text-red-600 mt-0.5 flex-shrink-0"></i>
-                                        <span><span class="font-semibold text-gray-900">ลา &lt; 5 วัน:</span> ยื่นล่วงหน้าอย่างน้อย 5 วัน</span>
+                                        <span data-i18n="vac_rule_1"><span class="font-semibold text-gray-900">ลา &lt; 5 วัน:</span> ยื่นล่วงหน้าอย่างน้อย 5 วัน</span>
                                     </div>
                                     <div class="flex items-start gap-3">
                                         <i data-lucide="clock" class="w-4 h-4 text-red-600 mt-0.5 flex-shrink-0"></i>
-                                        <span><span class="font-semibold text-gray-900">ลา &ge; 5 วัน:</span> ยื่นล่วงหน้า 2 สัปดาห์</span>
+                                        <span data-i18n="vac_rule_2"><span class="font-semibold text-gray-900">ลา &ge; 5 วัน:</span> ยื่นล่วงหน้า 2 สัปดาห์</span>
                                     </div>
                                     <div class="flex items-start gap-3">
                                         <i data-lucide="alert-circle" class="w-4 h-4 text-red-600 mt-0.5 flex-shrink-0"></i>
-                                        <span><span class="font-semibold text-gray-900">ลากิจฉุกเฉิน:</span> 3 วัน/ปี (แจ้งก่อน 10.00 น.)</span>
+                                        <span data-i18n="vac_rule_3"><span class="font-semibold text-gray-900">ลากิจฉุกเฉิน:</span> 3 วัน/ปี (แจ้งก่อน 10.00 น.)</span>
                                     </div>
                                 </div>
                             </div>
@@ -310,7 +327,7 @@
                     <button onclick="toggleAccordion('policy-sick')" class="w-full px-4 py-3 sm:px-6 sm:py-4 flex items-center justify-between bg-white hover:bg-red-50 transition-colors">
                         <div class="flex items-center gap-3">
                             <div class="p-1.5 sm:p-2 rounded-lg bg-red-50 text-red-700"><i data-lucide="thermometer" class="w-4 h-4 sm:w-5 sm:h-5"></i></div>
-                            <span class="font-bold text-base sm:text-lg text-gray-800">วันลาป่วย & รักษาพยาบาล</span>
+                            <span class="font-bold text-base sm:text-lg text-gray-800" data-i18n="sick_title">วันลาป่วย & รักษาพยาบาล</span>
                         </div>
                         <i data-lucide="chevron-down" id="icon-policy-sick" class="w-5 h-5 text-gray-400 transition-transform duration-300 rotate-180"></i>
                     </button>
@@ -320,29 +337,29 @@
                                 <div class="flex-1 space-y-4 sm:space-y-5 w-full">
                                     <div class="flex items-center gap-4">
                                         <div class="text-4xl sm:text-5xl font-extrabold text-gray-900">30</div>
-                                        <div class="text-xs text-gray-500 font-bold uppercase tracking-wider leading-tight">วัน / ปี<br/>ที่ได้รับ<br/>ค่าจ้างปกติ</div>
+                                        <div class="text-xs text-gray-500 font-bold uppercase tracking-wider leading-tight" data-i18n="sick_day_text">วัน / ปี<br/>ที่ได้รับ<br/>ค่าจ้างปกติ</div>
                                     </div>
                                     <div class="h-px bg-gray-100 w-full"></div>
                                     <ul class="space-y-3">
                                         <li class="flex items-start gap-3 text-gray-600 text-sm">
                                             <i data-lucide="file-plus" class="w-5 h-5 text-red-600 flex-shrink-0"></i>
-                                            <span>ลาป่วยติดต่อกัน <span class="font-bold text-gray-900">&ge; 3 วัน</span> ต้องแนบใบรับรองแพทย์</span>
+                                            <span data-i18n="sick_rule_1">ลาป่วยติดต่อกัน <span class="font-bold text-gray-900">&ge; 3 วัน</span> ต้องแนบใบรับรองแพทย์</span>
                                         </li>
                                         <li class="flex items-start gap-3 text-gray-600 text-sm">
                                             <i data-lucide="hospital" class="w-5 h-5 text-red-600 flex-shrink-0"></i>
-                                            <span>กรณี Admit รพ. ต้องแจ้งหัวหน้าและส่งใบรับรองแพทย์</span>
+                                            <span data-i18n="sick_rule_2">กรณี Admit รพ. ต้องแจ้งหัวหน้าและส่งใบรับรองแพทย์</span>
                                         </li>
                                         <li class="flex items-start gap-3 text-gray-600 text-sm">
                                             <i data-lucide="phone-call" class="w-5 h-5 text-red-600 flex-shrink-0"></i>
-                                            <span>แจ้งหัวหน้า หรือ HR ก่อนเวลา <span class="font-bold text-gray-900">10.00 น.</span> ของวันที่ลา</span>
+                                            <span data-i18n="sick_rule_3">แจ้งหัวหน้า หรือ HR ก่อนเวลา <span class="font-bold text-gray-900">10.00 น.</span> ของวันที่ลา</span>
                                         </li>
                                     </ul>
                                 </div>
                                 <div class="w-full lg:w-1/3 bg-red-50 p-4 sm:p-5 rounded-xl border border-red-100">
                                     <h4 class="font-bold flex items-center gap-2 mb-3 text-red-800 text-sm sm:text-base">
-                                        <i data-lucide="shield-alert" class="w-5 h-5"></i> ข้อควรระวัง
+                                        <i data-lucide="shield-alert" class="w-5 h-5"></i> <span data-i18n="sick_warn_title">ข้อควรระวัง</span>
                                     </h4>
-                                    <p class="text-xs sm:text-sm text-gray-700 leading-relaxed">
+                                    <p class="text-xs sm:text-sm text-gray-700 leading-relaxed" data-i18n="sick_warn_text">
                                         การใช้สิทธิผิดวิธีหรือเกินสิทธิ วันลาอาจถูกหัก หรือพิจารณาเป็นการลาโดยไม่ได้รับค่าจ้าง (Leave without pay) ในวันที่ลานั้นๆ
                                     </p>
                                 </div>
@@ -355,7 +372,7 @@
                     <button onclick="toggleAccordion('policy-special')" class="w-full px-4 py-3 sm:px-6 sm:py-4 flex items-center justify-between bg-white hover:bg-red-50 transition-colors">
                         <div class="flex items-center gap-3">
                             <div class="p-1.5 sm:p-2 rounded-lg bg-red-50 text-red-700"><i data-lucide="heart" class="w-4 h-4 sm:w-5 sm:h-5"></i></div>
-                            <span class="font-bold text-base sm:text-lg text-gray-800">วันลาพิเศษ & ครอบครัว</span>
+                            <span class="font-bold text-base sm:text-lg text-gray-800" data-i18n="spec_title">วันลาพิเศษ & ครอบครัว</span>
                         </div>
                         <i data-lucide="chevron-down" id="icon-policy-special" class="w-5 h-5 text-gray-400 transition-transform duration-300 rotate-180"></i>
                     </button>
@@ -364,45 +381,45 @@
                             <!-- Maternity -->
                             <div class="bg-white p-4 sm:p-5 rounded-xl shadow-sm border-l-4 border-pink-500 hover:shadow-md transition-all w-full">
                                 <div class="flex items-center gap-2 mb-3 text-pink-600 font-bold">
-                                    <i data-lucide="baby" class="w-5 h-5"></i> ลาคลอด (หญิง)
+                                    <i data-lucide="baby" class="w-5 h-5"></i> <span data-i18n="spec_mat">ลาคลอด (หญิง)</span>
                                 </div>
                                 <ul class="text-sm space-y-2 text-gray-600">
-                                    <li>• สูงสุด <strong>98 วัน</strong></li>
-                                    <li>• รับค่าจ้าง 45 วัน</li>
-                                    <li>• ยื่นขอ 4 สัปดาห์ก่อนลา</li>
+                                    <li data-i18n="spec_mat_1">• สูงสุด <strong>98 วัน</strong></li>
+                                    <li data-i18n="spec_mat_2">• รับค่าจ้าง 45 วัน</li>
+                                    <li data-i18n="spec_mat_3">• ยื่นขอ 4 สัปดาห์ก่อนลา</li>
                                 </ul>
                             </div>
                             <!-- Marriage -->
                             <div class="bg-white p-4 sm:p-5 rounded-xl shadow-sm border-l-4 border-red-500 hover:shadow-md transition-all w-full">
                                 <div class="flex items-center gap-2 mb-3 text-red-600 font-bold">
-                                    <i data-lucide="heart-handshake" class="w-5 h-5"></i> ลาแต่งงาน
+                                    <i data-lucide="heart-handshake" class="w-5 h-5"></i> <span data-i18n="spec_mar">ลาแต่งงาน</span>
                                 </div>
                                 <ul class="text-sm space-y-2 text-gray-600">
-                                    <li>• ได้ <strong>3 วัน</strong></li>
-                                    <li>• อายุงาน &ge; 1 ปี</li>
-                                    <li>• แนบใบสำคัญการสมรส</li>
+                                    <li data-i18n="spec_mar_1">• ได้ <strong>3 วัน</strong></li>
+                                    <li data-i18n="spec_mar_2">• อายุงาน &ge; 1 ปี</li>
+                                    <li data-i18n="spec_mar_3">• แนบใบสำคัญการสมรส</li>
                                 </ul>
                             </div>
                             <!-- Paternity -->
                             <div class="bg-white p-4 sm:p-5 rounded-xl shadow-sm border-l-4 border-blue-500 hover:shadow-md transition-all w-full">
                                 <div class="flex items-center gap-2 mb-3 text-blue-600 font-bold">
-                                    <i data-lucide="users" class="w-5 h-5"></i> ลาดูแลบุตร (ชาย)
+                                    <i data-lucide="users" class="w-5 h-5"></i> <span data-i18n="spec_pat">ลาดูแลบุตร (ชาย)</span>
                                 </div>
                                 <ul class="text-sm space-y-2 text-gray-600">
-                                    <li>• ได้ <strong>5 วัน/บุตร</strong></li>
-                                    <li>• สูงสุด 3 คน</li>
-                                    <li>• ต้องแนบสูติบัตร</li>
+                                    <li data-i18n="spec_pat_1">• ได้ <strong>5 วัน/บุตร</strong></li>
+                                    <li data-i18n="spec_pat_2">• สูงสุด 3 คน</li>
+                                    <li data-i18n="spec_pat_3">• ต้องแนบสูติบัตร</li>
                                 </ul>
                             </div>
                             <!-- Funeral -->
                             <div class="bg-white p-4 sm:p-5 rounded-xl shadow-sm border-l-4 border-gray-600 hover:shadow-md transition-all w-full">
                                 <div class="flex items-center gap-2 mb-3 text-gray-700 font-bold">
-                                    <div class="w-5 h-5 bg-gray-200 rounded-full flex items-center justify-center text-[10px]">F</div> งานศพ
+                                    <div class="w-5 h-5 bg-gray-200 rounded-full flex items-center justify-center text-[10px]">F</div> <span data-i18n="spec_fun">งานศพ</span>
                                 </div>
                                 <ul class="text-sm space-y-2 text-gray-600">
-                                    <li>• ได้ <strong>3 วัน</strong></li>
-                                    <li>• เงินช่วย 10,000 บาท </li>
-                                    <li>• พ่อ, แม่, คู่สมรส, บุตร</li>
+                                    <li data-i18n="spec_fun_1">• ได้ <strong>3 วัน</strong></li>
+                                    <li data-i18n="spec_fun_2">• เงินช่วย 10,000 บาท </li>
+                                    <li data-i18n="spec_fun_3">• พ่อ, แม่, คู่สมรส, บุตร</li>
                                 </ul>
                             </div>
                         </div>
@@ -413,7 +430,7 @@
                     <button onclick="toggleAccordion('policy-other')" class="w-full px-4 py-3 sm:px-6 sm:py-4 flex items-center justify-between bg-white hover:bg-red-50 transition-colors">
                         <div class="flex items-center gap-3">
                             <div class="p-1.5 sm:p-2 rounded-lg bg-red-50 text-red-700"><i data-lucide="book-open" class="w-4 h-4 sm:w-5 sm:h-5"></i></div>
-                            <span class="font-bold text-base sm:text-lg text-gray-800">การลาอื่นๆ</span>
+                            <span class="font-bold text-base sm:text-lg text-gray-800" data-i18n="oth_title">การลาอื่นๆ</span>
                         </div>
                         <i data-lucide="chevron-down" id="icon-policy-other" class="w-5 h-5 text-gray-400 transition-transform duration-300 rotate-180"></i>
                     </button>
@@ -423,23 +440,23 @@
                                 <div class="flex justify-between items-start mb-4">
                                     <h3 class="text-base sm:text-lg font-bold text-gray-800 flex items-center gap-2">
                                         <i data-lucide="graduation-cap" class="w-5 h-5 text-gray-400"></i>
-                                        การพัฒนาตนเอง & สุขภาพ
+                                        <span data-i18n="oth_edu_title">การพัฒนาตนเอง & สุขภาพ</span>
                                     </h3>
                                 </div>
                                 <div class="space-y-4 text-gray-600 text-sm">
                                     <div class="flex justify-between items-start border-b border-gray-100 pb-3">
                                         <div>
                                             <span class="font-bold text-gray-800 block">ลาสอบ/ศึกษาต่อ</span>
-                                            <span class="text-xs text-gray-500">ต้องมีหลักฐานการสมัครสอบ</span>
+                                            <span class="text-xs text-gray-500" data-i18n="oth_edu_1">ต้องมีหลักฐานการสมัครสอบ</span>
                                         </div>
-                                        <span class="bg-gray-100 text-gray-800 px-2 py-1 rounded text-xs font-bold whitespace-nowrap">6 วัน/ปี</span>
+                                        <span class="bg-gray-100 text-gray-800 px-2 py-1 rounded text-xs font-bold whitespace-nowrap" data-i18n="oth_edu_2">6 วัน/ปี</span>
                                     </div>
                                     <div class="flex justify-between items-center">
                                         <div>
-                                            <span class="font-bold text-gray-800 block">ลาทำหมัน</span>
-                                            <span class="text-xs text-gray-500">ตามระยะเวลาในใบรับรองแพทย์</span>
+                                            <span class="font-bold text-gray-800 block" data-i18n="oth_ster_title">ลาทำหมัน</span>
+                                            <span class="text-xs text-gray-500" data-i18n="oth_ster_1">ตามระยะเวลาในใบรับรองแพทย์</span>
                                         </div>
-                                        <span class="bg-gray-100 text-gray-800 px-2 py-1 rounded text-xs font-bold whitespace-nowrap">สูงสุด 5 วัน</span>
+                                        <span class="bg-gray-100 text-gray-800 px-2 py-1 rounded text-xs font-bold whitespace-nowrap" data-i18n="oth_ster_2">สูงสุด 5 วัน</span>
                                     </div>
                                 </div>
                             </div>
@@ -447,23 +464,23 @@
                                 <div class="flex justify-between items-start mb-4">
                                     <h3 class="text-base sm:text-lg font-bold text-gray-800 flex items-center gap-2">
                                         <i data-lucide="flag" class="w-5 h-5 text-gray-400"></i>
-                                        หน้าที่พลเมือง & ศาสนา
+                                        <span data-i18n="oth_mil_title">หน้าที่พลเมือง & ศาสนา</span>
                                     </h3>
                                 </div>
                                 <div class="space-y-4 text-gray-600 text-sm">
                                     <div class="flex justify-between items-start border-b border-gray-100 pb-3">
                                         <div>
                                             <span class="font-bold text-gray-800 block">ลาราชการทหาร</span>
-                                            <span class="text-xs text-gray-500">เรียกพลเพื่อฝึกวิชาทหาร</span>
+                                            <span class="text-xs text-gray-500" data-i18n="oth_mil_1">เรียกพลเพื่อฝึกวิชาทหาร</span>
                                         </div>
-                                        <span class="bg-gray-100 text-gray-800 px-2 py-1 rounded text-xs font-bold whitespace-nowrap">60 วัน</span>
+                                        <span class="bg-gray-100 text-gray-800 px-2 py-1 rounded text-xs font-bold whitespace-nowrap" data-i18n="oth_mil_2">60 วัน</span>
                                     </div>
                                     <div class="flex justify-between items-center">
                                         <div>
-                                            <span class="font-bold text-gray-800 block">ลาบวช</span>
-                                            <span class="text-xs text-gray-500">ตามอายุงานและระเบียบบริษัท</span>
+                                            <span class="font-bold text-gray-800 block" data-i18n="oth_monk_title">ลาบวช</span>
+                                            <span class="text-xs text-gray-500" data-i18n="oth_monk_1">ตามอายุงานและระเบียบบริษัท</span>
                                         </div>
-                                        <span class="bg-gray-100 text-gray-800 px-2 py-1 rounded text-xs font-bold whitespace-nowrap">ตามกฎหมาย</span>
+                                        <span class="bg-gray-100 text-gray-800 px-2 py-1 rounded text-xs font-bold whitespace-nowrap" data-i18n="oth_monk_2">ตามกฎหมาย</span>
                                     </div>
                                 </div>
                             </div>
@@ -473,10 +490,10 @@
                                 <i data-lucide="alert-triangle" class="w-6 h-6"></i>
                             </div>
                             <div>
-                                <p class="text-amber-900 font-medium text-sm">
+                                <p class="text-amber-900 font-medium text-sm" data-i18n="oth_warn_1">
                                     การใช้สิทธิเกิน หรือไม่ถูกต้อง จะถูกหักวันหยุดพักผ่อนหรือเป็นการลาไม่รับค่าจ้าง (Leave without Pay)
                                 </p>
-                                <p class="text-amber-800 text-xs mt-1">
+                                <p class="text-amber-800 text-xs mt-1" data-i18n="oth_warn_2">
                                     การลาทุกประเภทต้องได้รับ <span class="font-bold underline">อนุมัติจากหัวหน้างานและฝ่ายบริหารอาวุโส</span>
                                 </p>
                             </div>
@@ -493,8 +510,8 @@
                     <i data-lucide="book-open-check" class="w-5 h-5 sm:w-6 sm:h-6"></i>
                 </div>
                 <div>
-                    <h2 class="text-lg sm:text-2xl font-bold text-gray-800">คู่มือการจ้างงาน</h2>
-                    <p class="text-xs sm:text-sm text-gray-500">บริษัท เวือร์ท (ประเทศไทย) จำกัด (เวอร์ชั่น 3.3 ฉบับย่อ)</p>
+                    <h2 class="text-lg sm:text-2xl font-bold text-gray-800" data-i18n="nav_manual">คู่มือการจ้างงาน</h2>
+                    <p class="text-xs sm:text-sm text-gray-500" data-i18n="manual_sub">บริษัท เวือร์ท (ประเทศไทย) จำกัด (เวอร์ชั่น 3.3 ฉบับย่อ)</p>
                 </div>
             </div>
             <!-- Accordion Container -->
@@ -504,10 +521,11 @@
                     <button onclick="toggleAccordion('manual-1')" class="w-full px-4 py-3 sm:px-6 sm:py-4 flex items-center justify-between bg-white hover:bg-red-50 transition-colors">
                         <div class="flex items-center gap-3">
                             <span class="bg-red-100 text-red-700 font-bold px-2 py-1 rounded text-sm">บทที่ 1</span>
-                            <span class="font-bold text-base sm:text-lg text-gray-800">สัญญาจ้างแรงงาน</span>
+                            <span class="font-bold text-base sm:text-lg text-gray-800" data-i18n="ch1_title">สัญญาจ้างแรงงาน</span>
                         </div>
                         <i data-lucide="chevron-down" id="icon-manual-1" class="w-5 h-5 text-gray-400 transition-transform duration-300"></i>
                     </button>
+                    <!-- เนื้อหาตารางไม่ได้ใส่ Data i18n ทุกบรรทัดเพื่อป้องกันโค้ดพันกันเกินไป แต่จะแปลหัวข้อหลักให้ -->
                     <div id="manual-1" class="hidden bg-gray-50 p-3 sm:p-6 border-t border-gray-100">
                         <h4 class="font-bold text-red-700 mb-3 text-lg">การจำแนกประเภทงานและการจัดลำดับ</h4>
                         <div class="overflow-x-auto rounded-lg border border-gray-200 shadow-sm mb-6 bg-white table-container">
@@ -641,7 +659,7 @@
                     <button onclick="toggleAccordion('manual-2')" class="w-full px-4 py-3 sm:px-6 sm:py-4 flex items-center justify-between bg-white hover:bg-red-50 transition-colors">
                         <div class="flex items-center gap-3">
                             <span class="bg-red-100 text-red-700 font-bold px-2 py-1 rounded text-sm">บทที่ 2</span>
-                            <span class="font-bold text-base sm:text-lg text-gray-800">ชั่วโมงทำงาน</span>
+                            <span class="font-bold text-base sm:text-lg text-gray-800" data-i18n="ch2_title">ชั่วโมงทำงาน</span>
                         </div>
                         <i data-lucide="chevron-down" id="icon-manual-2" class="w-5 h-5 text-gray-400 transition-transform duration-300"></i>
                     </button>
@@ -702,7 +720,7 @@
                     <button onclick="toggleAccordion('manual-3')" class="w-full px-4 py-3 sm:px-6 sm:py-4 flex items-center justify-between bg-white hover:bg-red-50 transition-colors">
                         <div class="flex items-center gap-3">
                             <span class="bg-red-100 text-red-700 font-bold px-2 py-1 rounded text-sm">บทที่ 3</span>
-                            <span class="font-bold text-base sm:text-lg text-gray-800">การออกจากการเป็นพนักงานบริษัท</span>
+                            <span class="font-bold text-base sm:text-lg text-gray-800" data-i18n="ch3_title">การออกจากการเป็นพนักงานบริษัท</span>
                         </div>
                         <i data-lucide="chevron-down" id="icon-manual-3" class="w-5 h-5 text-gray-400 transition-transform duration-300"></i>
                     </button>
@@ -775,7 +793,7 @@
                     <button onclick="toggleAccordion('manual-4')" class="w-full px-4 py-3 sm:px-6 sm:py-4 flex items-center justify-between bg-white hover:bg-red-50 transition-colors">
                         <div class="flex items-center gap-3">
                             <span class="bg-red-100 text-red-700 font-bold px-2 py-1 rounded text-sm">บทที่ 4</span>
-                            <span class="font-bold text-base sm:text-lg text-gray-800">สวัสดิการรักษาพยาบาล</span>
+                            <span class="font-bold text-base sm:text-lg text-gray-800" data-i18n="ch4_title">สวัสดิการรักษาพยาบาล</span>
                         </div>
                         <i data-lucide="chevron-down" id="icon-manual-4" class="w-5 h-5 text-gray-400 transition-transform duration-300"></i>
                     </button>
@@ -817,7 +835,7 @@
                     <button onclick="toggleAccordion('manual-5')" class="w-full px-4 py-3 sm:px-6 sm:py-4 flex items-center justify-between bg-white hover:bg-red-50 transition-colors">
                         <div class="flex items-center gap-3">
                             <span class="bg-red-100 text-red-700 font-bold px-2 py-1 rounded text-sm">บทที่ 5</span>
-                            <span class="font-bold text-base sm:text-lg text-gray-800">ผลตอบแทนพิเศษ</span>
+                            <span class="font-bold text-base sm:text-lg text-gray-800" data-i18n="ch5_title">ผลตอบแทนพิเศษ</span>
                         </div>
                         <i data-lucide="chevron-down" id="icon-manual-5" class="w-5 h-5 text-gray-400 transition-transform duration-300"></i>
                     </button>
@@ -964,7 +982,7 @@
                     <button onclick="toggleAccordion('manual-6')" class="w-full px-4 py-3 sm:px-6 sm:py-4 flex items-center justify-between bg-white hover:bg-red-50 transition-colors">
                         <div class="flex items-center gap-3">
                             <span class="bg-red-100 text-red-700 font-bold px-2 py-1 rounded text-sm">บทที่ 6</span>
-                            <span class="font-bold text-base sm:text-lg text-gray-800">การบริหารจัดการเงินเดือน</span>
+                            <span class="font-bold text-base sm:text-lg text-gray-800" data-i18n="ch6_title">การบริหารจัดการเงินเดือน</span>
                         </div>
                         <i data-lucide="chevron-down" id="icon-manual-6" class="w-5 h-5 text-gray-400 transition-transform duration-300"></i>
                     </button>
@@ -1084,7 +1102,7 @@
                     <button onclick="toggleAccordion('manual-7')" class="w-full px-4 py-3 sm:px-6 sm:py-4 flex items-center justify-between bg-white hover:bg-red-50 transition-colors">
                         <div class="flex items-center gap-3">
                             <span class="bg-red-100 text-red-700 font-bold px-2 py-1 rounded text-sm">บทที่ 7</span>
-                            <span class="font-bold text-base sm:text-lg text-gray-800">จริยธรรมทางธุรกิจ</span>
+                            <span class="font-bold text-base sm:text-lg text-gray-800" data-i18n="ch7_title">จริยธรรมทางธุรกิจ</span>
                         </div>
                         <i data-lucide="chevron-down" id="icon-manual-7" class="w-5 h-5 text-gray-400 transition-transform duration-300"></i>
                     </button>
@@ -1128,7 +1146,7 @@
                     <button onclick="toggleAccordion('manual-8')" class="w-full px-4 py-3 sm:px-6 sm:py-4 flex items-center justify-between bg-white hover:bg-red-50 transition-colors">
                         <div class="flex items-center gap-3">
                             <span class="bg-red-100 text-red-700 font-bold px-2 py-1 rounded text-sm">บทที่ 8</span>
-                            <span class="font-bold text-base sm:text-lg text-gray-800">กฎระเบียบและข้อบังคับ</span>
+                            <span class="font-bold text-base sm:text-lg text-gray-800" data-i18n="ch8_title">กฎระเบียบและข้อบังคับ</span>
                         </div>
                         <i data-lucide="chevron-down" id="icon-manual-8" class="w-5 h-5 text-gray-400 transition-transform duration-300"></i>
                     </button>
@@ -1197,7 +1215,7 @@
                     <button onclick="toggleAccordion('manual-9')" class="w-full px-4 py-3 sm:px-6 sm:py-4 flex items-center justify-between bg-white hover:bg-red-50 transition-colors">
                         <div class="flex items-center gap-3">
                             <span class="bg-red-100 text-red-700 font-bold px-2 py-1 rounded text-sm">บทที่ 9</span>
-                            <span class="font-bold text-base sm:text-lg text-gray-800">กระบวนการร้องทุกข์</span>
+                            <span class="font-bold text-base sm:text-lg text-gray-800" data-i18n="ch9_title">กระบวนการร้องทุกข์</span>
                         </div>
                         <i data-lucide="chevron-down" id="icon-manual-9" class="w-5 h-5 text-gray-400 transition-transform duration-300"></i>
                     </button>
@@ -1235,22 +1253,22 @@
                     <i data-lucide="calculator" class="w-5 h-5 sm:w-6 sm:h-6"></i>
                 </div>
                 <div>
-                    <h2 class="text-lg sm:text-2xl font-bold text-gray-800">คำนวณสิทธิวันลาพักร้อน</h2>
-                    <p class="text-xs sm:text-sm text-gray-500">ตรวจสอบสิทธิตามอายุงานและนโยบายบริษัท</p>
+                    <h2 class="text-lg sm:text-2xl font-bold text-gray-800" data-i18n="nav_calc">คำนวณสิทธิวันลาพักร้อน</h2>
+                    <p class="text-xs sm:text-sm text-gray-500" data-i18n="calc_sub">ตรวจสอบสิทธิตามอายุงานและนโยบายบริษัท</p>
                 </div>
             </div>
             <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
                 <!-- Input Panel -->
                 <div class="xl:col-span-1 bg-white p-6 rounded-xl shadow-lg border-t-4 border-red-700 w-full">
-                    <label class="block text-sm font-medium text-gray-700 mb-2">วันที่เริ่มงาน </label>
+                    <label class="block text-sm font-medium text-gray-700 mb-2" data-i18n="calc_date_label">วันที่เริ่มงาน </label>
                     <input type="date" id="start-date" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none transition-all mb-4 text-gray-700" onchange="calculateLeave()">
                     
                     <div class="bg-gray-50 p-4 rounded-lg border border-gray-100 text-sm space-y-2">
-                        <p class="text-gray-600"><span class="font-semibold text-gray-800">วันนี้:</span> <span id="current-date-display">-</span></p>
-                        <p class="text-gray-600"><span class="font-semibold text-gray-800">อายุงาน:</span> <span id="tenure-display" class="text-red-600 font-bold">-</span></p>
+                        <p class="text-gray-600"><span class="font-semibold text-gray-800" data-i18n="calc_today">วันนี้:</span> <span id="current-date-display">-</span></p>
+                        <p class="text-gray-600"><span class="font-semibold text-gray-800" data-i18n="calc_tenure">อายุงาน:</span> <span id="tenure-display" class="text-red-600 font-bold">-</span></p>
                     </div>
 
-                    <button onclick="calculateLeave()" class="w-full mt-4 bg-red-700 text-white py-3 rounded-lg font-bold hover:bg-red-800 transition-colors shadow-md active:transform active:scale-95">
+                    <button onclick="calculateLeave()" class="w-full mt-4 bg-red-700 text-white py-3 rounded-lg font-bold hover:bg-red-800 transition-colors shadow-md active:transform active:scale-95" data-i18n="btn_calc">
                         คำนวณสิทธิ
                     </button>
                 </div>
@@ -1261,8 +1279,8 @@
                         <div class="bg-gray-100 p-4 rounded-full inline-block mb-4">
                             <i data-lucide="calendar-search" class="w-12 h-12 text-gray-400"></i>
                         </div>
-                        <h3 class="text-lg font-medium text-gray-500">กรุณาระบุวันที่เริ่มงาน</h3>
-                        <p class="text-sm text-gray-400 mt-1">ระบบจะคำนวณสิทธิวันลาตามระเบียบให้คุณอัตโนมัติ</p>
+                        <h3 class="text-lg font-medium text-gray-500" data-i18n="calc_ph_title">กรุณาระบุวันที่เริ่มงาน</h3>
+                        <p class="text-sm text-gray-400 mt-1" data-i18n="calc_ph_desc">ระบบจะคำนวณสิทธิวันลาตามระเบียบให้คุณอัตโนมัติ</p>
                     </div>
                     <!-- Result State (Hidden by default) -->
                     <div id="result-content" class="hidden w-full max-w-md mx-auto">
@@ -1270,13 +1288,13 @@
                             <span class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider" id="status-badge"></span>
                         </div>
                         <h3 class="text-3xl lg:text-4xl font-extrabold text-gray-800 mb-2">
-                            <span id="leave-days" class="text-red-600">0</span> วัน
+                            <span id="leave-days" class="text-red-600">0</span> <span data-i18n="calc_unit">วัน</span>
                         </h3>
-                        <p class="text-gray-500 mb-6">สิทธิวันหยุดพักผ่อนประจำปีของคุณ</p>
+                        <p class="text-gray-500 mb-6" data-i18n="calc_desc">สิทธิวันหยุดพักผ่อนประจำปีของคุณ</p>
                         
                         <div class="bg-red-50 rounded-lg p-4 text-left border-l-4 border-red-600">
                             <h4 class="font-bold text-red-800 mb-1 flex items-center gap-2">
-                                <i data-lucide="info" class="w-4 h-4"></i> รายละเอียด
+                                <i data-lucide="info" class="w-4 h-4"></i> <span data-i18n="calc_detail_title">รายละเอียด</span>
                             </h4>
                             <p id="calculation-detail" class="text-sm text-red-700 leading-relaxed"></p>
                         </div>
@@ -1295,12 +1313,11 @@
     <div id="login-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-[100] flex items-center justify-center p-4">
         <div class="bg-white rounded-xl shadow-2xl w-full max-w-xs p-6 relative">
             <button onclick="closeLoginModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600"><i data-lucide="x" class="w-5 h-5"></i></button>
-            <h3 class="text-lg font-bold text-gray-800 mb-4 text-center">Admin Console</h3>
+            <h3 class="text-lg font-bold text-gray-800 mb-4 text-center" data-i18n="login_title">Admin Console</h3>
             <div class="space-y-4">
-                <input type="text" id="admin-user" placeholder="Username" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 outline-none text-sm">
-                <input type="password" id="admin-pass" placeholder="Password" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 outline-none text-sm">
-                <!-- เพิ่ม ID เพื่อให้เปลี่ยนข้อความตอนโหลดได้ -->
-                <button id="login-submit-btn" onclick="submitLogin()" class="w-full bg-red-700 hover:bg-red-800 text-white font-bold py-2 rounded-lg transition-colors text-sm">เข้าสู่ระบบ</button>
+                <input type="text" id="admin-user" data-i18n-placeholder="placeholder_user" placeholder="Username" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 outline-none text-sm">
+                <input type="password" id="admin-pass" data-i18n-placeholder="placeholder_pass" placeholder="Password" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 outline-none text-sm">
+                <button id="login-submit-btn" onclick="submitLogin()" class="w-full bg-red-700 hover:bg-red-800 text-white font-bold py-2 rounded-lg transition-colors text-sm" data-i18n="btn_login">เข้าสู่ระบบ</button>
             </div>
         </div>
     </div>
@@ -1309,59 +1326,80 @@
     <div id="new-post-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-[100] flex items-center justify-center p-4">
         <div class="bg-white rounded-xl shadow-2xl w-full max-w-lg p-6 relative">
             <button onclick="closeNewPostModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600"><i data-lucide="x" class="w-5 h-5"></i></button>
-            <h3 class="text-xl font-bold text-gray-800 mb-4">เพิ่มประกาศใหม่</h3>
+            <h3 class="text-xl font-bold text-gray-800 mb-4" data-i18n="new_post_title">เพิ่มประกาศใหม่</h3>
             <div class="space-y-4">
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">หัวข้อประกาศ</label>
-                    <input type="text" id="new-post-topic" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 outline-none" placeholder="ใส่หัวข้อเรื่อง...">
+                    <label class="block text-sm font-medium text-gray-700 mb-1" data-i18n="post_topic_label">หัวข้อประกาศ</label>
+                    <input type="text" id="new-post-topic" data-i18n-placeholder="placeholder_topic" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 outline-none" placeholder="ใส่หัวข้อเรื่อง...">
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">เนื้อหา</label>
+                    <label class="block text-sm font-medium text-gray-700 mb-1" data-i18n="post_content_label">เนื้อหา</label>
                     <!-- Rich Text Toolbar -->
                     <div class="rich-toolbar">
-                        <button class="tool-btn" onclick="execCmd('bold')" title="ตัวหนา"><i data-lucide="bold" class="w-4 h-4"></i></button>
-                        <button class="tool-btn" onclick="execCmd('italic')" title="ตัวเอียง"><i data-lucide="italic" class="w-4 h-4"></i></button>
-                        <button class="tool-btn" onclick="execCmd('underline')" title="ขีดเส้นใต้"><i data-lucide="underline" class="w-4 h-4"></i></button>
+                        <button class="tool-btn" onclick="execCmd('bold')"><i data-lucide="bold" class="w-4 h-4"></i></button>
+                        <button class="tool-btn" onclick="execCmd('italic')"><i data-lucide="italic" class="w-4 h-4"></i></button>
+                        <button class="tool-btn" onclick="execCmd('underline')"><i data-lucide="underline" class="w-4 h-4"></i></button>
                         <div class="w-px h-6 bg-gray-300 mx-1"></div>
-                        <input type="color" id="color-picker" class="h-8 w-8 p-0 border-0 cursor-pointer" title="สีตัวอักษร" onchange="execCmd('foreColor', this.value)">
-                        <button class="tool-btn bg-yellow-200 hover:bg-yellow-300 border-yellow-300" onclick="execCmd('backColor', 'yellow')" title="ไฮไลท์"><i data-lucide="highlighter" class="w-4 h-4"></i></button>
+                        <input type="color" id="color-picker" class="h-8 w-8 p-0 border-0 cursor-pointer" onchange="execCmd('foreColor', this.value)">
+                        <button class="tool-btn bg-yellow-200 hover:bg-yellow-300 border-yellow-300" onclick="execCmd('backColor', 'yellow')"><i data-lucide="highlighter" class="w-4 h-4"></i></button>
                         <div class="w-px h-6 bg-gray-300 mx-1"></div>
-                        <button class="tool-btn" onclick="triggerImageUpload()" title="แทรกรูปภาพ"><i data-lucide="image" class="w-4 h-4"></i></button>
+                        <button class="tool-btn" onclick="triggerImageUpload()"><i data-lucide="image" class="w-4 h-4"></i></button>
                         <!-- Hidden File Input -->
                         <input type="file" id="img-input" accept="image/*" hidden onchange="handleImageUpload(event)">
                     </div>
-                    <!-- Editable Content Div -->
-                    <div id="new-post-content" class="rich-editor" contenteditable="true" placeholder="พิมพ์เนื้อหาที่นี่..."></div>
+                    <div id="new-post-content" class="rich-editor" contenteditable="true"></div>
                 </div>
-                <button onclick="submitNewPost()" id="submit-post-btn" class="w-full bg-red-700 hover:bg-red-800 text-white font-bold py-3 rounded-lg transition-colors">โพสต์ประกาศ</button>
+                <button onclick="submitNewPost()" id="submit-post-btn" class="w-full bg-red-700 hover:bg-red-800 text-white font-bold py-3 rounded-lg transition-colors" data-i18n="btn_post">โพสต์ประกาศ</button>
             </div>
         </div>
     </div>
+    
     <!-- CHANGE PASSWORD MODAL -->
     <div id="change-password-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-[110] flex items-center justify-center p-4">
       <div class="bg-white rounded-xl shadow-2xl w-full max-w-xs p-6 relative">
         <button onclick="closeChangePasswordModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600"><i data-lucide="x" class="w-5 h-5"></i></button>
-        <h3 class="text-lg font-bold text-gray-800 mb-4 text-center">เปลี่ยนรหัสผ่าน Admin</h3>
+        <h3 class="text-lg font-bold text-gray-800 mb-4 text-center" data-i18n="change_pass_title">เปลี่ยนรหัสผ่าน Admin</h3>
         <div class="space-y-4">
             <div>
-                <label class="text-xs text-gray-500 font-bold">Username ใหม่:</label>
+                <label class="text-xs text-gray-500 font-bold" data-i18n="new_user_label">Username ใหม่:</label>
                 <input type="text" id="new-admin-user" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 outline-none text-sm">
             </div>
             <div>
-                <label class="text-xs text-gray-500 font-bold">Password ใหม่:</label>
+                <label class="text-xs text-gray-500 font-bold" data-i18n="new_pass_label">Password ใหม่:</label>
                 <input type="password" id="new-admin-pass" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 outline-none text-sm">
             </div>
-            <button onclick="submitChangePassword()" id="btn-submit-password" class="w-full bg-gray-900 hover:bg-black text-white font-bold py-2 rounded-lg transition-colors text-sm">บันทึกรหัสผ่านใหม่</button>
+            <button onclick="submitChangePassword()" id="btn-submit-password" class="w-full bg-gray-900 hover:bg-black text-white font-bold py-2 rounded-lg transition-colors text-sm" data-i18n="btn_save_pass">บันทึกรหัสผ่านใหม่</button>
         </div>
       </div>
     </div>
+    
     <!-- Footer -->
     <footer class="bg-gray-900 text-gray-400 py-10 mt-auto border-t border-gray-800 text-center text-sm">
-        <p>© Wuerth Thailand. Internal Use Only.</p>
+        <p data-i18n="footer_text">© Wuerth Thailand. Internal Use Only.</p>
     </footer>
 
     <script>
-        // === FIREBASE REALTIME SETUP ===
+        // ==========================================
+        // 🛑 กรุณาใส่ URL ของ GOOGLE APPS SCRIPT WEB APP ที่ได้จากขั้นตอนที่แล้ว
+        // ==========================================
+        const API_URL = "https://script.google.com/macros/s/AKfycbw8NM6u6pTHD-iW7uEvDUtI-f3MA2fIvPcVCmHLIVG2LhsS0aI6Uw8FcNYyKqpUWWpQ/exec"; 
+        
+        async function callBackend(action, payload = {}) {
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify({ action: action, payload: payload })
+                });
+                const result = await response.json();
+                if (!result.success) throw new Error(result.error);
+                return result.data;
+            } catch (error) {
+                console.error("API Error:", error);
+                throw error;
+            }
+        }
+
         const firebaseConfig = {
             apiKey: "AIzaSyA69fQ5DbaN9r3YfxEFoVLZnbANvTKYeOM",
             authDomain: "officeheartgame-a2771.firebaseapp.com",
@@ -1373,68 +1411,79 @@
             measurementId: "G-FG1QQHJ2EN"
         };
 
-        // Initialize Firebase Realtime Sync
         function initRealtimeSync() {
             if (!firebase.apps.length) {
                 try {
                     firebase.initializeApp(firebaseConfig);
                     const db = firebase.database();
-                    
-                    // 1. Listen for Main Announcement
                     db.ref('mainAnnouncement').on('value', (snapshot) => {
                         const data = snapshot.val();
                         if (data) renderAnnouncement(data);
                     });
-
-                    // 2. Listen for Posts
                     db.ref('posts').on('value', (snapshot) => {
                         const data = snapshot.val();
+                        window.currentPostsData = data; // บันทึกไว้เผื่อ Re-render ตอนเปลี่ยนภาษา
                         if (data) renderPosts(data);
                     });
-                    
-                    console.log("Firebase Realtime Listener Started");
                 } catch (e) {
-                    console.warn("Firebase Config not set properly. Realtime features disabled.");
+                    console.warn("Firebase Config Error:", e);
                 }
             }
         }
 
-        // === STATE VARIABLES ===
         let isAdmin = false;
         let adminCreds = { user: '', pass: '' };
-        let editingPostId = null; // Track which post is being edited
+        let editingPostId = null;
+        window.currentPostsData = null; // สำหรับสลับภาษาแบบทันที
 
         document.addEventListener('DOMContentLoaded', () => {
             lucide.createIcons();
-            fetchAllData(); // Fetch initial static data (contact info)
-            initRealtimeSync(); // Start listening for updates
+            fetchAllData(); 
+            initRealtimeSync(); 
             checkUrlLogin();
 
-             // 3. Calculator Date Limit
             const dateInput = document.getElementById('start-date');
             if(dateInput) {
                 const today = new Date().toISOString().split('T')[0];
                 dateInput.max = today;
             }
+
+            document.addEventListener('click', function(event) {
+                const mainBtn = document.getElementById('menu-icon')?.closest('button');
+                const mainMenu = document.getElementById('main-menu');
+                const langBtn = document.getElementById('current-lang-text')?.closest('button');
+                const langMenu = document.getElementById('lang-menu');
+
+                if (mainBtn && mainMenu && !mainBtn.contains(event.target) && !mainMenu.contains(event.target)) {
+                    mainMenu.classList.add('hidden');
+                }
+                if (langBtn && langMenu && !langBtn.contains(event.target) && !langMenu.contains(event.target)) {
+                    langMenu.classList.add('hidden');
+                }
+            });
         });
 
-        // === FETCH DATA (Modified to handle split sources) ===
-        function fetchAllData() {
-            if (typeof google === 'undefined') {
-                // สำหรับตอนทดสอบ Local
-                renderContact({ phone: "02-123-4567", email: "test@test.com" });
-                return;
-            }
-            // เรียกข้อมูลเบอร์โทร/อีเมล จาก Apps Script
-            google.script.run
-                .withSuccessHandler(function(data) {
-                    renderContact(data.contact);
-                })
-                .withFailureHandler(err => console.error(err))
-                .getAllData();
+        function toggleMainMenu(event) {
+            if(event) event.stopPropagation();
+            document.getElementById('main-menu').classList.toggle('hidden');
+            document.getElementById('lang-menu').classList.add('hidden');
         }
 
-        // Separated Render Logic for Reuse
+        function toggleLangMenu(event) {
+            if(event) event.stopPropagation();
+            document.getElementById('lang-menu').classList.toggle('hidden');
+            document.getElementById('main-menu').classList.add('hidden'); 
+        }
+
+        async function fetchAllData() {
+            try {
+                const data = await callBackend('getAllData');
+                if(data && data.contact) renderContact(data.contact);
+            } catch(e) {
+                renderContact({ phone: "094-480-1597", email: "Wadsana.Nonrucha@wuerth.co.th" });
+            }
+        }
+
         function renderAnnouncement(main) {
             if(!main) return;
             document.getElementById('announcement-loading').classList.add('hidden');
@@ -1462,27 +1511,23 @@
         function renderPosts(posts) {
             const container = document.getElementById('additional-posts-container');
             container.innerHTML = '';
-            
-            // Ensure posts is an array
             const postsArray = Array.isArray(posts) ? posts : (posts ? Object.values(posts) : []);
 
-            // Sort: Pinned first, then by date desc
             postsArray.sort((a, b) => {
-                // If one is pinned and other isn't, pinned comes first
                 if (a.pinned && !b.pinned) return -1;
                 if (!a.pinned && b.pinned) return 1;
-                // If both same pinned status, sort by date desc
                 return new Date(b.date) - new Date(a.date);
             });
 
             postsArray.forEach(post => {
-                // Filter Hidden posts for non-admins
                 if (post.hidden && !isAdmin) return;
 
+                // อัปเดต Locale Date ตามภาษาที่เลือก
+                const lang = localStorage.getItem('wurth_lang') || 'th';
+                const localeStr = lang === 'en' ? 'en-US' : 'th-TH';
                 const dateObj = new Date(post.date);
-                const dateStr = dateObj.toLocaleDateString('th-TH', { day: 'numeric', month: 'short', year: 'numeric' });
+                const dateStr = dateObj.toLocaleDateString(localeStr, { day: 'numeric', month: 'short', year: 'numeric' });
                 
-                // Styles based on status
                 let cardClass = 'extra-card p-5 fade-in relative';
                 if (post.pinned) cardClass += ' card-pinned';
                 if (post.hidden) cardClass += ' card-hidden';
@@ -1490,30 +1535,30 @@
                 const card = document.createElement('div');
                 card.className = cardClass;
                 
-                // Admin Action Buttons
                 let adminControls = '';
                 if (isAdmin) {
+                    // ใช้ฟังก์ชัน t() เพื่อดึงภาษา
                     adminControls = `
                         <div class="flex gap-2 mt-2 border-t pt-2 border-gray-200 justify-end">
                             <button onclick="togglePin('${post.id}', ${post.pinned})" class="text-xs flex items-center gap-1 px-2 py-1 rounded hover:bg-yellow-100 ${post.pinned ? 'text-yellow-600 bg-yellow-50' : 'text-gray-500'}">
-                                <i data-lucide="pin" class="w-3 h-3"></i> ${post.pinned ? 'เลิกปักหมุด' : 'ปักหมุด'}
+                                <i data-lucide="pin" class="w-3 h-3"></i> ${post.pinned ? t('unpin') : t('pin')}
                             </button>
                             <button onclick="openEditPost('${post.id}')" class="text-xs flex items-center gap-1 px-2 py-1 rounded hover:bg-blue-100 text-blue-600">
-                                <i data-lucide="pencil" class="w-3 h-3"></i> แก้ไข
+                                <i data-lucide="pencil" class="w-3 h-3"></i> ${t('edit')}
                             </button>
                             <button onclick="toggleHide('${post.id}', ${post.hidden})" class="text-xs flex items-center gap-1 px-2 py-1 rounded hover:bg-gray-200 text-gray-500">
-                                <i data-lucide="${post.hidden ? 'eye' : 'eye-off'}" class="w-3 h-3"></i> ${post.hidden ? 'แสดง' : 'ซ่อน'}
+                                <i data-lucide="${post.hidden ? 'eye' : 'eye-off'}" class="w-3 h-3"></i> ${post.hidden ? t('show') : t('hide')}
                             </button>
                             <button onclick="deletePost('${post.id}')" class="text-xs flex items-center gap-1 px-2 py-1 rounded hover:bg-red-100 text-red-600">
-                                <i data-lucide="trash-2" class="w-3 h-3"></i> ลบ
+                                <i data-lucide="trash-2" class="w-3 h-3"></i> ${t('delete')}
                             </button>
                         </div>
                     `;
                 }
 
                 card.innerHTML = `
-                    ${post.pinned ? '<div class="pin-badge"><i data-lucide="pin" class="w-3 h-3"></i> ปักหมุด</div>' : ''}
-                    ${post.hidden && isAdmin ? '<div class="text-xs text-gray-500 mb-1 flex items-center gap-1"><i data-lucide="eye-off" class="w-3 h-3"></i> ซ่อนอยู่ (Admin เห็นเท่านั้น)</div>' : ''}
+                    ${post.pinned ? `<div class="pin-badge"><i data-lucide="pin" class="w-3 h-3"></i> ${t('pin_badge')}</div>` : ''}
+                    ${post.hidden && isAdmin ? `<div class="text-xs text-gray-500 mb-1 flex items-center gap-1"><i data-lucide="eye-off" class="w-3 h-3"></i> ${t('hidden_admin')}</div>` : ''}
                     
                     <div class="mb-2">
                         <h3 class="text-lg font-bold text-gray-800">${post.topic}</h3>
@@ -1522,7 +1567,6 @@
                     <div class="text-xs text-gray-400 border-t border-gray-100 pt-2 text-right">${dateStr}</div>
                     ${adminControls}
                 `;
-                // Add specific styling for images inside posts
                 const imgs = card.querySelectorAll('img');
                 imgs.forEach(img => img.style.maxWidth = '100%');
                 container.appendChild(card);
@@ -1530,26 +1574,21 @@
             lucide.createIcons();
         }
 
-        // === ADMIN LOGIC (อัปเดตระบบตรวจสอบ Error) ===
-        function checkUrlLogin() {
-            if (typeof google === 'undefined') return;
-            google.script.url.getLocation(function(location) {
-                const params = location.parameter;
-                if (params.u && params.p) {
-                    google.script.run
-                    .withSuccessHandler(function(isValid) {
-                        if (isValid) {
-                            adminCreds.user = params.u;
-                            adminCreds.pass = params.p;
-                            setAdminMode(true);
-                        }
-                    })
-                    .withFailureHandler(function(err) {
-                        console.error("Auto Login Error:", err);
-                    })
-                    .verifyLogin(params.u, params.p);
-                }
-            });
+        // === ADMIN LOGIC ===
+        async function checkUrlLogin() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const u = urlParams.get('u');
+            const p = urlParams.get('p');
+            
+            if (u && p) {
+                try {
+                    const isValid = await callBackend('verifyLogin', { username: u, password: p });
+                    if (isValid) {
+                        adminCreds = { user: u, pass: p };
+                        setAdminMode(true);
+                    }
+                } catch(e) { console.error("Auto Login Error:", e); }
+            }
         }
 
         function handleAdminClick() {
@@ -1557,56 +1596,33 @@
             else document.getElementById('login-modal').classList.remove('hidden');
         }
 
-        // --- จุดที่มีการแก้ไขเพิ่มเติมเพื่อดักจับ Error เข้าสู่ระบบ ---
-        function submitLogin() {
+        async function submitLogin() {
             const u = document.getElementById('admin-user').value;
             const p = document.getElementById('admin-pass').value;
             const btn = document.getElementById('login-submit-btn');
 
-            if (!u || !p) {
-                alert("กรุณากรอกข้อมูลให้ครบถ้วน");
-                return;
-            }
+            if (!u || !p) { alert(t('alert_fill_all')); return; }
 
-            // แสดงสถานะโหลด
-            const originalText = btn.innerText;
-            btn.innerText = "กำลังตรวจสอบ...";
+            btn.innerText = t('btn_checking');
             document.body.style.cursor = 'wait';
             btn.disabled = true;
 
-            if (typeof google === 'undefined') {
-                // ทดสอบบน Local
+            try {
+                const isValid = await callBackend('verifyLogin', { username: u, password: p });
+                if (isValid) { 
+                    adminCreds = { user: u, pass: p }; 
+                    setAdminMode(true); 
+                    closeLoginModal(); 
+                } else { 
+                    alert(t('alert_login_fail')); 
+                }
+            } catch(e) {
+                alert(t('alert_error') + e.message);
+            } finally {
                 document.body.style.cursor = 'default';
-                btn.innerText = originalText;
+                btn.innerText = t('btn_login');
                 btn.disabled = false;
-                if (u === 'admin' && p === 'admin') { adminCreds = { user: u, pass: p }; setAdminMode(true); closeLoginModal(); }
-                else { alert('Username หรือ Password ไม่ถูกต้อง (Local Test)'); }
-                return;
             }
-
-            // เรียกตรวจสอบกับเซิร์ฟเวอร์
-            google.script.run
-                .withSuccessHandler(function(isValid) {
-                    document.body.style.cursor = 'default';
-                    btn.innerText = originalText;
-                    btn.disabled = false;
-                    
-                    if (isValid) { 
-                        adminCreds = { user: u, pass: p }; 
-                        setAdminMode(true); 
-                        closeLoginModal(); 
-                    } else { 
-                        alert('Username หรือ Password ไม่ถูกต้อง'); 
-                    }
-                })
-                .withFailureHandler(function(err) {
-                    // หาก Backend (code.gs) มี Error จะแจ้งเตือนตรงนี้
-                    document.body.style.cursor = 'default';
-                    btn.innerText = originalText;
-                    btn.disabled = false;
-                    alert('เกิดข้อผิดพลาดจากเซิร์ฟเวอร์:\n\n' + err.message + '\n\n*โปรดตรวจสอบไฟล์ code.gs ของคุณว่าลบโค้ดเดิมหมดแล้วหรือไม่');
-                })
-                .verifyLogin(u, p);
         }
 
         function setAdminMode(enabled) {
@@ -1615,17 +1631,17 @@
             if (enabled) {
                 btn.innerHTML = '<i data-lucide="pencil" class="w-4 h-4 text-red-600"></i>';
                 document.getElementById('contact-edit-btn').classList.remove('hidden');
-                document.getElementById('change-password-btn').classList.remove('hidden'); // แสดงปุ่มเปลี่ยนรหัส
+                document.getElementById('change-password-btn').classList.remove('hidden');
                 document.getElementById('admin-fab').classList.remove('hidden');
             }
             lucide.createIcons();
-            // Re-render to show admin controls if posts already loaded via Firebase
             const db = firebase.database();
             db.ref('posts').once('value').then(snapshot => {
                 const data = snapshot.val();
                 if(data) renderPosts(data);
             });
         }
+        
         function closeLoginModal() { document.getElementById('login-modal').classList.add('hidden'); }
 
         // === EDIT LOGIC ===
@@ -1639,54 +1655,59 @@
                 edit.classList.add('hidden'); display.classList.remove('hidden'); saveBtn.classList.add('hidden');
             }
         }
-        function saveAnnouncement() {
-            const t = document.getElementById('edit-topic').value;
-            const b = document.getElementById('edit-body').value;
+
+        async function saveAnnouncement() {
+            const tInput = document.getElementById('edit-topic').value;
+            const bInput = document.getElementById('edit-body').value;
             const btn = document.getElementById('save-btn');
             btn.innerText = "...";
-            if (typeof google === 'undefined') return;
-            google.script.run.withSuccessHandler((res) => {
-                if(res.success) {
-                    // Update UI locally immediately for responsiveness (Realtime will confirm later)
-                    document.getElementById('ann-topic').innerText = t;
-                    document.getElementById('ann-body').innerText = b;
+            
+            try {
+                const res = await callBackend('saveMainAnnouncement', {
+                    username: adminCreds.user, password: adminCreds.pass, topic: tInput, body: bInput
+                });
+                if(res && res.success) {
+                    document.getElementById('ann-topic').innerText = tInput;
+                    document.getElementById('ann-body').innerText = bInput;
                     toggleEditMode();
-                    btn.innerHTML = '<i data-lucide="save" class="w-4 h-4"></i> บันทึก';
                 }
-            }).saveMainAnnouncement(adminCreds.user, adminCreds.pass, t, b);
+            } catch(e) { alert(t('alert_error') + e.message); }
+            btn.innerHTML = `<i data-lucide="save" class="w-4 h-4"></i> ${t('btn_save')}`;
+            lucide.createIcons();
         }
+
         function toggleContactEdit() {
             const display = document.getElementById('contact-display');
             const edit = document.getElementById('contact-edit');
             if (edit.classList.contains('hidden')) { display.classList.add('hidden'); edit.classList.remove('hidden'); }
             else { edit.classList.add('hidden'); display.classList.remove('hidden'); }
         }
-        function saveContact() {
+
+        async function saveContact() {
             const p = document.getElementById('edit-phone').value;
             const e = document.getElementById('edit-email').value;
-            if (typeof google === 'undefined') return;
-            google.script.run.withSuccessHandler((res) => {
-                if(res.success) {
+            try {
+                const res = await callBackend('saveContactInfo', {
+                    username: adminCreds.user, password: adminCreds.pass, phone: p, email: e
+                });
+                if(res && res.success) {
                     renderContact({phone: p, email: e});
                     toggleContactEdit();
                 }
-            }).saveContactInfo(adminCreds.user, adminCreds.pass, p, e);
+            } catch(err) { alert(t('alert_error') + err.message); }
         }
 
         // === NEW POST & RICH TEXT ===
         function openNewPostModal() { 
-            editingPostId = null; // Reset editing state
+            editingPostId = null;
             document.getElementById('new-post-topic').value = ""; 
             document.getElementById('new-post-content').innerHTML = "";
-            document.getElementById('submit-post-btn').innerText = "โพสต์ประกาศ";
-            document.querySelector('#new-post-modal h3').innerText = "เพิ่มประกาศใหม่";
-            
+            document.getElementById('submit-post-btn').innerText = t('btn_post');
+            document.querySelector('#new-post-modal h3').innerText = t('new_post_title');
             document.getElementById('new-post-modal').classList.remove('hidden'); 
-            document.getElementById('new-post-content').focus(); 
         }
 
         function openEditPost(id) {
-            // Find post data from current display (or fetch from Firebase)
             const db = firebase.database();
             db.ref('posts').once('value').then(snapshot => {
                 const posts = snapshot.val() || [];
@@ -1695,9 +1716,8 @@
                     editingPostId = id;
                     document.getElementById('new-post-topic').value = post.topic;
                     document.getElementById('new-post-content').innerHTML = post.content;
-                    document.getElementById('submit-post-btn').innerText = "บันทึกการแก้ไข";
-                    document.querySelector('#new-post-modal h3').innerText = "แก้ไขประกาศ";
-                    
+                    document.getElementById('submit-post-btn').innerText = t('btn_save_edit');
+                    document.querySelector('#new-post-modal h3').innerText = t('edit');
                     document.getElementById('new-post-modal').classList.remove('hidden');
                 }
             });
@@ -1706,165 +1726,145 @@
         function closeNewPostModal() { document.getElementById('new-post-modal').classList.add('hidden'); }
         function execCmd(command, value = null) { document.execCommand(command, false, value); document.getElementById('new-post-content').focus(); }
         
-        // --- Image Upload Logic ---
-        function triggerImageUpload() {
-            document.getElementById('img-input').click();
-        }
+        function triggerImageUpload() { document.getElementById('img-input').click(); }
 
         function handleImageUpload(e) {
             const file = e.target.files[0];
             if (!file) return;
 
-            // Show loading state cursor
             document.body.style.cursor = 'wait';
-            
             const reader = new FileReader();
-            reader.onload = function(e) {
-                const rawData = e.target.result; // data:image/jpeg;base64,.....
+            reader.onload = async function(e) {
+                const rawData = e.target.result;
                 const base64Data = rawData.split(',')[1];
                 const mimeType = rawData.split(';')[0].split(':')[1];
                 
-                if (typeof google === 'undefined') {
-                    // Test mode
-                    document.execCommand('insertImage', false, rawData);
-                    document.body.style.cursor = 'default';
-                    return;
-                }
-
-                google.script.run.withSuccessHandler(function(res) {
-                    document.body.style.cursor = 'default';
-                    if (res.success) {
-                        // Insert image with max-width style
+                try {
+                    const res = await callBackend('uploadImageToDrive', {
+                        username: adminCreds.user, password: adminCreds.pass, data: base64Data, mimeType: mimeType, fileName: file.name
+                    });
+                    if (res && res.success) {
                         const imgHtml = `<img src="${res.url}" style="max-width: 100%; border-radius: 8px; margin: 10px 0;">`;
                         document.execCommand('insertHTML', false, imgHtml);
-                    } else {
-                        alert('เกิดข้อผิดพลาดในการอัปโหลดรูปภาพ: ' + res.error);
                     }
-                }).uploadImageToDrive(adminCreds.user, adminCreds.pass, base64Data, mimeType, file.name);
+                } catch(err) {
+                    alert(t('alert_error') + err.message);
+                } finally {
+                    document.body.style.cursor = 'default';
+                }
             }
             reader.readAsDataURL(file);
         }
 
-        // --- UPDATED SUBMIT LOGIC FOR DIRECT FIREBASE WRITE ---
-        function submitNewPost() {
+        async function submitNewPost() {
              const topic = document.getElementById('new-post-topic').value;
              const content = document.getElementById('new-post-content').innerHTML;
              const btn = document.getElementById('submit-post-btn');
 
-            if (!topic) { alert("กรุณาใส่หัวข้อ"); return; }
+            if (!topic) { alert(t('alert_no_topic')); return; }
 
-        // เปลี่ยนสถานะปุ่ม
-        btn.innerText = "กำลังบันทึก...";
-        document.body.style.cursor = 'wait';
+            btn.innerText = t('btn_saving');
+            document.body.style.cursor = 'wait';
 
-       // เตรียมข้อมูลส่งไป Backend
-      // editingPostId จะเป็น null ถ้าสร้างใหม่, หรือเป็นรหัสถ้ากดแก้ไข (ระบบเดิมคุณทำไว้ดีแล้ว)
-      const postData = {
-        id: editingPostId, 
-        topic: topic,
-        content: content
-      };
+            const postData = { id: editingPostId, topic: topic, content: content };
 
-      // เรียก Google Apps Script ให้ทำงานแทน
-       google.script.run
-          .withSuccessHandler(function(res) {
-            document.body.style.cursor = 'default';
-            if (res.success) {
-                closeNewPostModal();
-                // รีเซ็ตปุ่มเป็นข้อความเดิม (เผื่อเปิดใช้ครั้งหน้า)
-                btn.innerText = editingPostId ? "บันทึกการแก้ไข" : "โพสต์ประกาศ"; 
-                console.log("Save Success");
+            try {
+                const res = await callBackend('savePostServer', {
+                    username: adminCreds.user, password: adminCreds.pass, postData: postData
+                });
+                if (res && res.success) closeNewPostModal();
+            } catch(err) {
+                alert(t('alert_error') + err.message);
+            } finally {
+                document.body.style.cursor = 'default';
+                btn.innerText = editingPostId ? t('btn_save_edit') : t('btn_post'); 
             }
-          })
-          .withFailureHandler(function(err) {
-            document.body.style.cursor = 'default';
-            console.error(err);
-            alert("เกิดข้อผิดพลาด: " + err.message);
-            btn.innerText = "ลองใหม่อีกครั้ง";
-          })
-         .savePostServer(adminCreds.user, adminCreds.pass, postData);
-       }
+        }
 
-        // --- NEW HELPER FUNCTIONS FOR PIN/HIDE ---
-                    // ฟังก์ชัน Pin/Unpin (ส่งงานให้ Backend ทำ)
-      function togglePin(id, currentStatus) {
-           updatePostFieldServer(id, 'pinned', !currentStatus);
-      }
+        async function togglePin(id, currentStatus) {
+           await updatePostFieldServer(id, 'pinned', !currentStatus);
+        }
 
-          // ฟังก์ชัน Hide/Show (ส่งงานให้ Backend ทำ)
-      function toggleHide(id, currentStatus) {
-          updatePostFieldServer(id, 'hidden', !currentStatus);
-      }
+        async function toggleHide(id, currentStatus) {
+          await updatePostFieldServer(id, 'hidden', !currentStatus);
+        }
 
-          // ตัวกลางส่งข้อมูลไปหา Google Apps Script
-      function updatePostFieldServer(id, field, value) {
-          // แสดงสถานะว่ากำลังทำงาน (เปลี่ยน cursor เป็น wait)
+        async function updatePostFieldServer(id, field, value) {
           document.body.style.cursor = 'wait';
+          try {
+              await callBackend('updatePostStatus', {
+                  username: adminCreds.user, password: adminCreds.pass, postId: id, field: field, value: value
+              });
+          } catch(err) { alert(t('alert_error') + err.message); }
+          finally { document.body.style.cursor = 'default'; }
+        }
 
-          google.script.run
-         .withSuccessHandler(function(res) {
-         document.body.style.cursor = 'default';
-            if (res.success) {
-                console.log("Update Success");
-                // ไม่ต้องทำอะไรเพิ่ม เพราะ Firebase Realtime Listener จะอัปเดตหน้าจอให้เอง
+        async function deletePost(id) {
+            if(!confirm(t('confirm_delete'))) return;
+            document.body.style.cursor = 'wait';
+            try {
+                await callBackend('deletePostServer', {
+                    username: adminCreds.user, password: adminCreds.pass, postId: id
+                });
+            } catch(err) { alert(t('alert_error') + err.message); }
+            finally { document.body.style.cursor = 'default'; }
+        }
+
+        // === PASSWORD CHANGE ===
+        function openChangePasswordModal() {
+            document.getElementById('new-admin-user').value = adminCreds.user;
+            document.getElementById('new-admin-pass').value = ''; 
+            document.getElementById('change-password-modal').classList.remove('hidden');
+         }
+
+        function closeChangePasswordModal() { document.getElementById('change-password-modal').classList.add('hidden'); }
+
+        async function submitChangePassword() {
+            const newU = document.getElementById('new-admin-user').value;
+            const newP = document.getElementById('new-admin-pass').value;
+            const btn = document.getElementById('btn-submit-password');
+
+            if(!newU || !newP) { alert(t('alert_fill_all')); return; }
+            if(!confirm(t('confirm_pass'))) return;
+
+            btn.innerText = t('btn_saving');
+            document.body.style.cursor = 'wait';
+
+            try {
+                const res = await callBackend('updateAdminCredentials', {
+                    oldUser: adminCreds.user, oldPass: adminCreds.pass, newUser: newU, newPass: newP
+                });
+                if(res && res.success) {
+                    alert(t('alert_pass_success'));
+                    adminCreds.user = newU;
+                    adminCreds.pass = newP;
+                    closeChangePasswordModal();
+                }
+            } catch(err) { alert(t('alert_error') + err.message); }
+            finally {
+                document.body.style.cursor = 'default';
+                btn.innerText = t('btn_save_pass');
             }
-        })
-        .withFailureHandler(function(err) {
-            document.body.style.cursor = 'default';
-            alert("เกิดข้อผิดพลาด: " + err.message);
-        })
-         .updatePostStatus(adminCreds.user, adminCreds.pass, id, field, value);
         }
-
-            // ฟังก์ชันลบ (ส่งงานให้ Backend ทำ)
-        function deletePost(id) {
-            if(!confirm("ต้องการลบประกาศนี้ใช่หรือไม่?")) return;
-    
-              document.body.style.cursor = 'wait';
-
-              google.script.run
-             .withSuccessHandler(function(res) {
-              document.body.style.cursor = 'default';
-              console.log("Delete Success");
-            })
-            .withFailureHandler(function(err) {
-             document.body.style.cursor = 'default';
-             alert("ลบไม่สำเร็จ: " + err.message);
-            })
-             .deletePostServer(adminCreds.user, adminCreds.pass, id);
-        }
-
-        // === NAVIGATION & CALCULATOR (Fixed Effect Logic) ===
+        
+        // === NAVIGATION & CALCULATOR LOGIC ===
         function filterContent(tab) {
             document.querySelectorAll('.content-section').forEach(el => el.classList.add('hidden'));
             document.getElementById(tab + '-section').classList.remove('hidden');
             
-            // Update Active State for Desktop Buttons
-            document.querySelectorAll('.nav-btn').forEach(btn => {
+            // อัปเดตสถานะปุ่มใน Main Menu Dropdown
+            document.querySelectorAll('#main-menu .nav-btn').forEach(btn => {
                 const isActive = btn.dataset.tab === tab;
                 if(isActive) {
-                    btn.classList.remove('text-gray-600', 'hover:text-red-700', 'hover:bg-gray-50');
-                    btn.classList.add('bg-red-50', 'text-red-700', 'ring-2', 'ring-red-200'); // Add ring
-                    if(tab === 'home') btn.classList.add('border-red-100'); // Ensure border for home if needed
-                } else {
-                    btn.classList.remove('bg-red-50', 'text-red-700', 'ring-2', 'ring-red-200', 'border-red-100');
-                    btn.classList.add('text-gray-600', 'hover:text-red-700', 'hover:bg-gray-50');
-                }
-            });
-
-            // Update Active State for Mobile Buttons (Restored)
-            document.querySelectorAll('.mobile-nav-btn').forEach(btn => {
-                if(btn.dataset.tab === tab) {
-                    btn.classList.remove('text-gray-600');
-                    btn.classList.add('bg-red-50', 'text-red-700');
+                    btn.classList.remove('text-gray-600', 'hover:bg-gray-50', 'hover:text-red-700');
+                    btn.classList.add('bg-red-50', 'text-red-700'); 
                 } else {
                     btn.classList.remove('bg-red-50', 'text-red-700');
-                    btn.classList.add('text-gray-600');
+                    btn.classList.add('text-gray-600', 'hover:bg-gray-50', 'hover:text-red-700');
                 }
             });
 
-            // Close Mobile Menu if open
-            document.getElementById('mobile-menu').classList.add('hidden');
+            document.getElementById('main-menu').classList.add('hidden');
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
@@ -1875,7 +1875,6 @@
             if (content.classList.contains('hidden')) { icon.style.transform = 'rotate(0deg)'; icon.classList.remove('rotate-180'); }
             else { icon.style.transform = 'rotate(180deg)'; icon.classList.add('rotate-180'); }
         }
-        function toggleMobileMenu() { document.getElementById('mobile-menu').classList.toggle('hidden'); }
 
         function calculateLeave() {
             const startDateInput = document.getElementById('start-date').value;
@@ -1891,10 +1890,10 @@
                 document.getElementById('tenure-display').innerText = "-";
                 const resultBadge = document.getElementById('status-badge');
                 resultBadge.className = "px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-red-100 text-red-700";
-                resultBadge.innerText = "วันที่ไม่ถูกต้อง";
+                resultBadge.innerText = t('calc_invalid_date_badge');
                 const leaveEl = document.getElementById('leave-days');
                 leaveEl.innerText = "0"; leaveEl.className = "text-gray-400";
-                document.getElementById('calculation-detail').innerHTML = "<span class='text-red-600 font-bold'>ไม่สามารถเลือกวันที่ในอนาคตได้</span><br>กรุณาเลือกวันที่เริ่มงานใหม่อีกครั้ง";
+                document.getElementById('calculation-detail').innerHTML = t('calc_invalid_date_msg');
                 return;
             } else {
                 document.getElementById('leave-days').className = "text-red-600";
@@ -1910,8 +1909,14 @@
             if (d < 0) { m--; d += 30; }
             if (m < 0) { y--; m += 12; }
             
-            document.getElementById('current-date-display').innerText = today.toLocaleDateString('th-TH');
-            document.getElementById('tenure-display').innerText = `${y} ปี ${m} เดือน`;
+            const lang = localStorage.getItem('wurth_lang') || 'th';
+            const localeStr = lang === 'en' ? 'en-US' : 'th-TH';
+            document.getElementById('current-date-display').innerText = today.toLocaleDateString(localeStr);
+            
+            const yrTxt = lang === 'en' ? 'Years' : 'ปี';
+            const moTxt = lang === 'en' ? 'Months' : 'เดือน';
+            document.getElementById('tenure-display').innerText = `${y} ${yrTxt} ${m} ${moTxt}`;
+            
             document.getElementById('result-placeholder').classList.add('hidden');
             document.getElementById('result-content').classList.remove('hidden');
 
@@ -1922,18 +1927,24 @@
             let leaveDays = 0; let message = ""; let badgeClass = ""; let badgeText = "";
 
             if (daysWorked <= 119) {
-                leaveDays = 0; badgeClass = "bg-gray-100 text-gray-700"; badgeText = "ช่วงทดลองงาน (Probation)";
-                message = `อายุงานของคุณคือ ${daysWorked} วัน <br> ตามระเบียบบริษัท พนักงานจะได้รับสิทธิวันหยุดพักผ่อนประจำปีหลังจากผ่านช่วงทดลองงาน (119 วัน) แล้วเท่านั้น`;
+                leaveDays = 0; badgeClass = "bg-gray-100 text-gray-700"; 
+                badgeText = t('calc_probation_badge');
+                message = t('calc_probation_msg', {days: daysWorked});
             } else if (tenureYears < 1) {
                 let rawLeave = (daysWorked / 365) * 14;
                 leaveDays = Math.round(rawLeave * 2) / 2; if (leaveDays > 14) leaveDays = 14;
-                badgeClass = "bg-orange-100 text-orange-700"; badgeText = "อายุงานไม่ถึง 1 ปี (Pro-rate)";
-                message = `ผ่านช่วงทดลองงานแล้ว (อายุงาน ${daysWorked} วัน) <br> ได้รับสิทธิตามสัดส่วนจากฐาน 14 วัน <br><br> สูตร: (${daysWorked} / 365) × 14 = ${rawLeave.toFixed(2)} วัน`;
+                badgeClass = "bg-orange-100 text-orange-700"; 
+                badgeText = t('calc_prorate_badge');
+                message = t('calc_prorate_msg', {days: daysWorked, raw: rawLeave.toFixed(2)});
             } else {
                 badgeClass = "bg-green-100 text-green-700";
-                if (tenureYears < 2) { leaveDays = 14; badgeText = "อายุงาน 1 - < 2 ปี"; message = "คุณได้รับสิทธิวันหยุดพักผ่อนประจำปีตามปกติ 14 วัน เนื่องจากมีอายุงานครบ 1 ปีขึ้นไป"; } 
-                else if (tenureYears < 5) { leaveDays = 17; badgeText = "อายุงาน 2 - < 5 ปี"; message = "คุณได้รับสิทธิวันหยุดพักผ่อนประจำปีเพิ่มขึ้นเป็น 17 วัน ตามอายุงาน"; } 
-                else { leaveDays = 19; badgeText = "อายุงาน 5 ปีขึ้นไป"; message = "คุณได้รับสิทธิวันหยุดพักผ่อนประจำปีสูงสุด 19 วัน ตามอายุงาน"; }
+                if (tenureYears < 2) { 
+                    leaveDays = 14; badgeText = t('calc_1_2_badge'); message = t('calc_1_2_msg'); 
+                } else if (tenureYears < 5) { 
+                    leaveDays = 17; badgeText = t('calc_2_5_badge'); message = t('calc_2_5_msg'); 
+                } else { 
+                    leaveDays = 19; badgeText = t('calc_5_up_badge'); message = t('calc_5_up_msg'); 
+                }
             }
             resultBadge.className = `px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${badgeClass}`;
             resultBadge.innerText = badgeText;
@@ -1943,53 +1954,6 @@
         }
 
         filterContent('home');
-
-        // --- ADMIN SETTINGS LOGIC ---
-
-        function openChangePasswordModal() {
-            document.getElementById('new-admin-user').value = adminCreds.user; // แนะนำ user เดิมให้
-            document.getElementById('new-admin-pass').value = ''; // ว่าง password ไว้
-            document.getElementById('change-password-modal').classList.remove('hidden');
-         }
-
-        function closeChangePasswordModal() {
-            document.getElementById('change-password-modal').classList.add('hidden');
-         }
-
-        function submitChangePassword() {
-            const newU = document.getElementById('new-admin-user').value;
-            const newP = document.getElementById('new-admin-pass').value;
-            const btn = document.getElementById('btn-submit-password');
-
-            if(!newU || !newP) {
-               alert("กรุณากรอกข้อมูลให้ครบถ้วน");
-               return;
-            }
-
-            if(!confirm("คุณแน่ใจหรือไม่ว่าจะเปลี่ยนรหัสผ่านแอดมิน? โปรดจดจำรหัสผ่านใหม่ให้ดี")) return;
-
-            btn.innerText = "กำลังบันทึก...";
-            document.body.style.cursor = 'wait';
-
-            google.script.run
-             .withSuccessHandler(function(res) {
-                 document.body.style.cursor = 'default';
-                 if (res.success) {
-                    alert("เปลี่ยนรหัสผ่านสำเร็จ! กรุณาใช้รหัสผ่านใหม่ในการเข้าสู่ระบบครั้งหน้า");
-                    // อัปเดต Creds ในหน่วยความจำปัจจุบัน
-                    adminCreds.user = newU;
-                    adminCreds.pass = newP;
-                    closeChangePasswordModal();
-                    btn.innerText = "บันทึกรหัสผ่านใหม่";
-                }
-            })
-            .withFailureHandler(function(err) {
-                document.body.style.cursor = 'default';
-                alert("เกิดข้อผิดพลาด: " + err.message);
-                btn.innerText = "บันทึกรหัสผ่านใหม่";
-            })
-            .updateAdminCredentials(adminCreds.user, adminCreds.pass, newU, newP);
-        }
     </script>
 </body>
 </html>
