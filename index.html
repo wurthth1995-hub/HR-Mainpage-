@@ -13,6 +13,9 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
     
+    <!-- นำเข้าไฟล์ระบบภาษา -->
+    <script src="lang.js"></script>
+    
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;700&display=swap');
         body { font-family: 'Sarabun', sans-serif; }
@@ -54,9 +57,7 @@
         /* New Post Card Style */
         .extra-card { background: white; border-radius: 0.75rem; box-shadow: 0 2px 5px rgba(0,0,0,0.05); border: 1px solid #f3f4f6; margin-bottom: 1rem; overflow: hidden; transition: transform 0.2s; }
         .extra-card:hover { transform: translateY(-2px); box-shadow: 0 4px 10px rgba(0,0,0,0.08); }
-        .button-wrapper::before { animation: spin-gradient 4s linear infinite; }
-        @keyframes spin-gradient { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-
+        
         /* Pinned & Hidden Styles */
         .card-pinned { border: 2px solid #fbbf24; background: linear-gradient(to bottom right, #fffbeb, #ffffff); }
         .card-hidden { opacity: 0.6; background-color: #f3f4f6; border: 1px dashed #9ca3af; }
@@ -69,30 +70,46 @@
     <header class="bg-white shadow-sm sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
+                <!-- Logo -->
                 <div onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="flex items-center gap-2 sm:gap-3 overflow-hidden cursor-pointer">
                     <img src="https://www.wuerth.co.th/media/system/layout_wl2bootstrap/bootstrap_system_images/wuerth_logo_big.png" alt="Wuerth Logo" class="h-6 sm:h-8 w-auto flex-shrink-0">
-                    <div class="hidden sm:block h-6 w-px bg-gray-300"></div>
+                    <div class="h-6 w-px bg-gray-300"></div>
                 </div>
-                <!-- Desktop Nav -->
-                <div class="hidden lg:flex space-x-1">
-                    <button onclick="filterContent('home')" class="nav-btn px-3 py-2 rounded-md text-sm font-medium transition-colors bg-red-50 text-red-700 border border-red-100 hover:bg-red-100 ring-2 ring-red-200" data-tab="home"><i data-lucide="home" class="w-4 h-4 inline mr-1"></i>หน้าหลัก</button>
-                    <button onclick="filterContent('policy')" class="nav-btn px-3 py-2 rounded-md text-sm font-medium transition-colors text-gray-600 hover:text-red-700 hover:bg-gray-50" data-tab="policy"><i data-lucide="clipboard-list" class="w-4 h-4 inline mr-1"></i>สิทธิการลา</button>
-                    <button onclick="filterContent('manual')" class="nav-btn px-3 py-2 rounded-md text-sm font-medium transition-colors text-gray-600 hover:text-red-700 hover:bg-gray-50" data-tab="manual"><i data-lucide="book" class="w-4 h-4 inline mr-1"></i>คู่มือพนักงาน</button>
-                    <button onclick="filterContent('calculator')" class="nav-btn px-3 py-2 rounded-md text-sm font-medium transition-colors text-gray-600 hover:text-red-700 hover:bg-gray-50" data-tab="calculator"><i data-lucide="calculator" class="w-4 h-4 inline mr-1"></i>คำนวณสิทธิ</button>
+                
+                <!-- ขวา: เมนูภาษา และ Hamburger Menu -->
+                <div class="flex items-center gap-2 sm:gap-4">
+                    
+                    <!-- Language Switcher Dropdown -->
+                    <div class="relative">
+                        <button onclick="toggleLangMenu(event)" class="flex items-center gap-1.5 px-3 py-1.5 border-[1.5px] border-gray-700 rounded-full text-sm font-medium text-gray-800 hover:bg-gray-100 transition-colors focus:outline-none">
+                            <i data-lucide="globe" class="w-4 h-4"></i>
+                            <span id="current-lang-text">English</span>
+                            <i data-lucide="chevron-down" class="w-4 h-4"></i>
+                        </button>
+                        
+                        <!-- Panel ภาษา -->
+                        <div id="lang-menu" class="hidden absolute right-0 mt-2 w-32 bg-white rounded-xl shadow-lg border border-gray-100 z-50 overflow-hidden">
+                            <button onclick="setLanguage('en')" class="block w-full text-left px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 hover:text-red-700 font-medium">English</button>
+                            <button onclick="setLanguage('th')" class="block w-full text-left px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 hover:text-red-700 font-medium border-t border-gray-100">ไทย</button>
+                        </div>
+                    </div>
+
+                    <!-- Main Menu Dropdown (Hamburger) -->
+                    <div class="relative">
+                        <button onclick="toggleMainMenu(event)" class="text-gray-800 focus:outline-none p-2 rounded-md hover:bg-gray-100 transition-colors">
+                            <i data-lucide="menu" id="menu-icon" class="w-6 h-6"></i>
+                        </button>
+                        
+                        <!-- Panel เมนูหลัก -->
+                        <div id="main-menu" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg border border-gray-100 z-50 overflow-hidden">
+                            <button onclick="filterContent('home')" class="nav-btn block w-full text-left px-4 py-3 text-sm font-medium bg-red-50 text-red-700" data-tab="home" data-i18n="nav_home">หน้าหลัก</button>
+                            <button onclick="filterContent('policy')" class="nav-btn block w-full text-left px-4 py-3 text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-red-700" data-tab="policy" data-i18n="nav_policy">สิทธิการลา</button>
+                            <button onclick="filterContent('manual')" class="nav-btn block w-full text-left px-4 py-3 text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-red-700" data-tab="manual" data-i18n="nav_manual">คู่มือพนักงาน</button>
+                            <button onclick="filterContent('calculator')" class="nav-btn block w-full text-left px-4 py-3 text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-red-700" data-tab="calculator" data-i18n="nav_calc">คำนวณสิทธิวันลา</button>
+                        </div>
+                    </div>
+
                 </div>
-                <!-- Mobile Menu Button -->
-                <div class="lg:hidden">
-                    <button onclick="toggleMobileMenu()" class="text-gray-600 focus:outline-none p-2 rounded-md hover:bg-gray-100"><i data-lucide="menu" id="menu-icon"></i></button>
-                </div>
-            </div>
-        </div>
-        <!-- Mobile Nav Menu -->
-        <div id="mobile-menu" class="hidden lg:hidden bg-white border-t border-gray-100 shadow-lg absolute w-full z-50">
-            <div class="px-4 pt-2 pb-4 space-y-2">
-                <button onclick="filterContent('home')" class="mobile-nav-btn block w-full text-left px-4 py-3 rounded-lg text-base font-medium bg-red-50 text-red-700 border border-red-100" data-tab="home">หน้าหลัก</button>
-                <button onclick="filterContent('policy')" class="mobile-nav-btn block w-full text-left px-4 py-3 rounded-lg text-base font-medium text-gray-600" data-tab="policy">สิทธิการลา</button>
-                <button onclick="filterContent('manual')" class="mobile-nav-btn block w-full text-left px-4 py-3 rounded-lg text-base font-medium text-gray-600" data-tab="manual">คู่มือพนักงาน</button>
-                <button onclick="filterContent('calculator')" class="mobile-nav-btn block w-full text-left px-4 py-3 rounded-lg text-base font-medium text-gray-600" data-tab="calculator">คำนวณสิทธิวันลา</button>
             </div>
         </div>
     </header>
@@ -103,9 +120,9 @@
         <section id="home-section" class="content-section fade-in mb-8">
             <div class="mb-6 sm:mb-8 text-center sm:text-left">
                 <h1 class="text-2xl sm:text-3xl font-extrabold text-gray-900 tracking-tight">
-                    <span class="text-red-700">Wurth</span> Employee Service
+                    <span class="text-red-700">Wurth</span> <span data-i18n="home_title">Employee Service</span>
                 </h1>
-                <p class="text-gray-500 mt-2 text-sm sm:text-base">ยินดีต้อนรับสู่ระบบบริการข้อมูลพนักงานและสวัสดิการ</p>
+                <p class="text-gray-500 mt-2 text-sm sm:text-base" data-i18n="home_subtitle">ยินดีต้อนรับสู่ระบบบริการข้อมูลพนักงานและสวัสดิการ</p>
             </div>
 
             <!-- CONTACT SECTION (EDITABLE) -->
@@ -118,7 +135,7 @@
                         <div class="flex justify-between items-start">
                             <h3 class="text-lg lg:text-xl font-bold mb-2 flex items-center gap-2">
                                 <div class="bg-red-600 p-1.5 rounded-lg lg:hidden"><i data-lucide="file-text" class="w-4 h-4 text-white"></i></div>
-                                ช่องทางการติดต่อ
+                                <span data-i18n="contact_title">ช่องทางการติดต่อ</span>
                             </h3>
                             <!-- ปุ่มแก้ไขข้อมูลติดต่อ (แสดงเมื่อ Login) -->
                             <div class="flex gap-2">
@@ -131,7 +148,7 @@
                             </div>
                         </div>
 
-                        <p class="text-gray-300 text-sm mb-4 mt-0 leading-relaxed">
+                        <p class="text-gray-300 text-sm mb-4 mt-0 leading-relaxed" data-i18n="contact_desc">
                             หากมีข้อสงสัย คำถามเพิ่มเติม หรือพบปัญหาใด ๆ สามารถติดต่อสอบถามได้โดยตรง
                         </p>
                         
@@ -162,7 +179,7 @@
                     <div class="flex items-center justify-between mb-4">
                         <div class="flex items-center gap-3">
                             <div class="p-2 bg-red-100 rounded-lg text-red-600"><i data-lucide="megaphone" class="w-6 h-6"></i></div>
-                            <h2 class="text-xl sm:text-2xl font-bold text-gray-800">ประกาศจากฝ่ายบุคคล</h2>
+                            <h2 class="text-xl sm:text-2xl font-bold text-gray-800" data-i18n="announcement_title">ประกาศจากฝ่ายบุคคล</h2>
                             <button onclick="handleAdminClick()" id="admin-btn" class="text-gray-300 hover:text-red-500 transition-colors p-1 rounded-full focus:outline-none">
                                 <i data-lucide="lock" id="admin-icon" class="w-4 h-4"></i>
                             </button>
@@ -202,15 +219,15 @@
             <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
                 <button onclick="filterContent('policy')" class="p-4 bg-white rounded-xl shadow-sm hover:shadow-md transition-all border border-gray-100 hover:border-red-200 group text-left">
                     <div class="p-2 bg-blue-50 text-blue-600 rounded-lg w-fit mb-3 group-hover:scale-110 transition-transform"><i data-lucide="clipboard-list" class="w-6 h-6"></i></div>
-                    <span class="font-bold text-gray-800 block">สิทธิการลา</span>
+                    <span class="font-bold text-gray-800 block" data-i18n="nav_policy">สิทธิการลา</span>
                 </button>
                 <button onclick="filterContent('manual')" class="p-4 bg-white rounded-xl shadow-sm hover:shadow-md transition-all border border-gray-100 hover:border-red-200 group text-left">
                     <div class="p-2 bg-orange-50 text-orange-600 rounded-lg w-fit mb-3 group-hover:scale-110 transition-transform"><i data-lucide="book" class="w-6 h-6"></i></div>
-                    <span class="font-bold text-gray-800 block">คู่มือพนักงาน</span>
+                    <span class="font-bold text-gray-800 block" data-i18n="nav_manual">คู่มือพนักงาน</span>
                 </button>
                  <button onclick="filterContent('calculator')" class="p-4 bg-white rounded-xl shadow-sm hover:shadow-md transition-all border border-gray-100 hover:border-red-200 group text-left col-span-2 sm:col-span-1">
                     <div class="p-2 bg-green-50 text-green-600 rounded-lg w-fit mb-3 group-hover:scale-110 transition-transform"><i data-lucide="calculator" class="w-6 h-6"></i></div>
-                    <span class="font-bold text-gray-800 block">คำนวณสิทธิ</span>
+                    <span class="font-bold text-gray-800 block" data-i18n="nav_calc">คำนวณสิทธิ</span>
                 </button>
             </div>
         </section>
@@ -222,7 +239,7 @@
                     <i data-lucide="clipboard-list" class="w-5 h-5 sm:w-6 sm:h-6"></i>
                 </div>
                 <div>
-                    <h2 class="text-lg sm:text-2xl font-bold text-gray-800">สิทธิการลา</h2>
+                    <h2 class="text-lg sm:text-2xl font-bold text-gray-800" data-i18n="nav_policy">สิทธิการลา</h2>
                     <p class="text-xs sm:text-sm text-gray-500">ระเบียบการลาประเภทต่างๆ ของบริษัท</p>
                 </div>
             </div>
@@ -493,7 +510,7 @@
                     <i data-lucide="book-open-check" class="w-5 h-5 sm:w-6 sm:h-6"></i>
                 </div>
                 <div>
-                    <h2 class="text-lg sm:text-2xl font-bold text-gray-800">คู่มือการจ้างงาน</h2>
+                    <h2 class="text-lg sm:text-2xl font-bold text-gray-800" data-i18n="nav_manual">คู่มือการจ้างงาน</h2>
                     <p class="text-xs sm:text-sm text-gray-500">บริษัท เวือร์ท (ประเทศไทย) จำกัด (เวอร์ชั่น 3.3 ฉบับย่อ)</p>
                 </div>
             </div>
@@ -1235,7 +1252,7 @@
                     <i data-lucide="calculator" class="w-5 h-5 sm:w-6 sm:h-6"></i>
                 </div>
                 <div>
-                    <h2 class="text-lg sm:text-2xl font-bold text-gray-800">คำนวณสิทธิวันลาพักร้อน</h2>
+                    <h2 class="text-lg sm:text-2xl font-bold text-gray-800" data-i18n="nav_calc">คำนวณสิทธิวันลาพักร้อน</h2>
                     <p class="text-xs sm:text-sm text-gray-500">ตรวจสอบสิทธิตามอายุงานและนโยบายบริษัท</p>
                 </div>
             </div>
@@ -1363,9 +1380,8 @@
     <script>
         // ==========================================
         // 🛑 กรุณาใส่ URL ของ GOOGLE APPS SCRIPT WEB APP ที่ได้จากขั้นตอนที่แล้ว
-        // (ห้ามเป็น URL ที่ลงท้ายด้วย /dev ให้ใช้ /exec เท่านั้น)
         // ==========================================
-        const API_URL = "https://script.google.com/macros/s/AKfycbw8NM6u6pTHD-iW7uEvDUtI-f3MA2fIvPcVCmHLIVG2LhsS0aI6Uw8FcNYyKqpUWWpQ/exec"; 
+        const API_URL = "https://script.google.com/macros/s/AKfycb.../exec"; // <-- แก้ไขตรงนี้!!
         
         // === ฟังก์ชันสำหรับยิง API ไปหา Apps Script ===
         async function callBackend(action, payload = {}) {
@@ -1433,15 +1449,43 @@
                 const today = new Date().toISOString().split('T')[0];
                 dateInput.max = today;
             }
+
+            // คลิกพื้นที่อื่นเพื่อปิด Dropdown เมนูและภาษา
+            document.addEventListener('click', function(event) {
+                const mainBtn = document.getElementById('menu-icon')?.closest('button');
+                const mainMenu = document.getElementById('main-menu');
+                const langBtn = document.getElementById('current-lang-text')?.closest('button');
+                const langMenu = document.getElementById('lang-menu');
+
+                if (mainBtn && mainMenu && !mainBtn.contains(event.target) && !mainMenu.contains(event.target)) {
+                    mainMenu.classList.add('hidden');
+                }
+                if (langBtn && langMenu && !langBtn.contains(event.target) && !langMenu.contains(event.target)) {
+                    langMenu.classList.add('hidden');
+                }
+            });
         });
 
-        // === FETCH DATA (เชื่อมต่อ API แบบใหม่) ===
+        // เปิด/ปิด Main Menu Dropdown
+        function toggleMainMenu(event) {
+            if(event) event.stopPropagation();
+            document.getElementById('main-menu').classList.toggle('hidden');
+            document.getElementById('lang-menu').classList.add('hidden'); // ปิดเมนูภาษาถ้าเปิดอยู่
+        }
+
+        // เปิด/ปิด Language Menu Dropdown
+        function toggleLangMenu(event) {
+            if(event) event.stopPropagation();
+            document.getElementById('lang-menu').classList.toggle('hidden');
+            document.getElementById('main-menu').classList.add('hidden'); // ปิดเมนูหลักถ้าเปิดอยู่
+        }
+
+        // === FETCH DATA ===
         async function fetchAllData() {
             try {
                 const data = await callBackend('getAllData');
                 if(data && data.contact) renderContact(data.contact);
             } catch(e) {
-                // Fallback กรณี API พังหรือยังไม่ได้ตั้งค่า
                 renderContact({ phone: "094-480-1597", email: "Wadsana.Nonrucha@wuerth.co.th" });
             }
         }
@@ -1534,7 +1578,6 @@
 
         // === ADMIN LOGIC ===
         async function checkUrlLogin() {
-            // ใช้ URLSearchParams แทน google.script.url เพื่อดึงค่าจาก Browser ตรงๆ
             const urlParams = new URLSearchParams(window.location.search);
             const u = urlParams.get('u');
             const p = urlParams.get('p');
@@ -1576,7 +1619,7 @@
                     alert('Username หรือ Password ไม่ถูกต้อง'); 
                 }
             } catch(e) {
-                alert('เกิดข้อผิดพลาดในการเชื่อมต่อเซิร์ฟเวอร์: ' + e.message + '\n\n*โปรดตรวจสอบว่าคุณได้ใส่ API_URL ที่ถูกต้องและ Deploy แบบ Web App อย่างถูกต้องหรือไม่');
+                alert('เกิดข้อผิดพลาดในการเชื่อมต่อเซิร์ฟเวอร์: ' + e.message);
             } finally {
                 document.body.style.cursor = 'default';
                 btn.innerText = "เข้าสู่ระบบ";
@@ -1810,29 +1853,19 @@
             document.querySelectorAll('.content-section').forEach(el => el.classList.add('hidden'));
             document.getElementById(tab + '-section').classList.remove('hidden');
             
-            document.querySelectorAll('.nav-btn').forEach(btn => {
+            // อัปเดตสถานะปุ่มใน Main Menu Dropdown
+            document.querySelectorAll('#main-menu .nav-btn').forEach(btn => {
                 const isActive = btn.dataset.tab === tab;
                 if(isActive) {
-                    btn.classList.remove('text-gray-600', 'hover:text-red-700', 'hover:bg-gray-50');
-                    btn.classList.add('bg-red-50', 'text-red-700', 'ring-2', 'ring-red-200'); 
-                    if(tab === 'home') btn.classList.add('border-red-100'); 
-                } else {
-                    btn.classList.remove('bg-red-50', 'text-red-700', 'ring-2', 'ring-red-200', 'border-red-100');
-                    btn.classList.add('text-gray-600', 'hover:text-red-700', 'hover:bg-gray-50');
-                }
-            });
-
-            document.querySelectorAll('.mobile-nav-btn').forEach(btn => {
-                if(btn.dataset.tab === tab) {
-                    btn.classList.remove('text-gray-600');
-                    btn.classList.add('bg-red-50', 'text-red-700');
+                    btn.classList.remove('text-gray-600', 'hover:bg-gray-50', 'hover:text-red-700');
+                    btn.classList.add('bg-red-50', 'text-red-700'); 
                 } else {
                     btn.classList.remove('bg-red-50', 'text-red-700');
-                    btn.classList.add('text-gray-600');
+                    btn.classList.add('text-gray-600', 'hover:bg-gray-50', 'hover:text-red-700');
                 }
             });
 
-            document.getElementById('mobile-menu').classList.add('hidden');
+            document.getElementById('main-menu').classList.add('hidden');
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
@@ -1843,8 +1876,6 @@
             if (content.classList.contains('hidden')) { icon.style.transform = 'rotate(0deg)'; icon.classList.remove('rotate-180'); }
             else { icon.style.transform = 'rotate(180deg)'; icon.classList.add('rotate-180'); }
         }
-
-        function toggleMobileMenu() { document.getElementById('mobile-menu').classList.toggle('hidden'); }
 
         function calculateLeave() {
             const startDateInput = document.getElementById('start-date').value;
