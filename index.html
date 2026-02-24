@@ -527,14 +527,14 @@
                     </button>
                     <!-- เนื้อหาตารางไม่ได้ใส่ Data i18n ทุกบรรทัดเพื่อป้องกันโค้ดพันกันเกินไป แต่จะแปลหัวข้อหลักให้ -->
                     <div id="manual-1" class="hidden bg-gray-50 p-3 sm:p-6 border-t border-gray-100">
-                        <h4 class="font-bold text-red-700 mb-3 text-lg">การจำแนกประเภทงานและการจัดลำดับ</h4>
+                        <h4 class="font-bold text-red-700 mb-3 text-lg" data-i18n="mn_ch1_sec1_title">การจำแนกประเภทงานและการจัดลำดับ</h4>
                         <div class="overflow-x-auto rounded-lg border border-gray-200 shadow-sm mb-6 bg-white table-container">
                             <table class="manual-table">
                                 <thead>
                                     <tr>
-                                        <th>กลุ่ม</th>
-                                        <th>ระดับ</th>
-                                        <th>ตำแหน่ง</th>
+                                        <th data-i18n="mn_ch1_table_h1">กลุ่ม</th>
+                                        <th data-i18n="mn_ch1_table_h2">ระดับ</th>
+                                        <th data-i18n="mn_ch1_table_h3">ตำแหน่ง</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -629,28 +629,28 @@
                                     </tr>
                                 </tbody>
                             </table>
-                            <p class="text-xs text-gray-500 mt-2 p-2">* หมายเหตุ: ตำแหน่ง 3 และ 6 อยู่ต่ำที่สุด และ 1 อยู่สูงที่สุดของแต่ละกลุ่ม</p>
+                            <p class="text-xs text-gray-500 mt-2 p-2" data-i18n="mn_ch1_note">* หมายเหตุ: ตำแหน่ง 3 และ 6 อยู่ต่ำที่สุด และ 1 อยู่สูงที่สุดของแต่ละกลุ่ม</p>
                         </div>
                         <div class="mt-6 bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
                           <h4 class="font-bold text-red-700 mb-2 flex items-center gap-2">
-                            <i data-lucide="file-check" class="w-5 h-5"></i> การโอนย้ายและการไปปฏิบัติงานที่หน่วยงานอื่น
+                            <i data-lucide="file-check" class="w-5 h-5"></i> <span data-i18n="mn_ch1_sec2_title">การโอนย้ายและการไปปฏิบัติงานที่หน่วยงานอื่น</span>
                           </h4>
                           <ul class=" list-outside ml-5 text-sm text-gray-700 space-y-2">
-                             <li>บริษัทมี<u>ดุลพินิจเด็ดขาด</u>ในการโอนย้ายและส่งพนักงานไปปฏิบัติงานในส่วนแผนกหรือสํานักงานภูมิภาคของบริษัท ตามความต้องการทางธุรกิจ ดังต่อไปนี้</li>
+                             <li data-i18n="mn_ch1_sec2_desc">บริษัทมี<u>ดุลพินิจเด็ดขาด</u>ในการโอนย้ายและส่งพนักงานไปปฏิบัติงานในส่วนแผนกหรือสํานักงานภูมิภาคของบริษัท ตามความต้องการทางธุรกิจ ดังต่อไปนี้</li>
                              <ul class="list-disc list-outside mt-2 ml-5 ">
-                               <li>บริการหรือความเชี่ยวชาญที่หน่วยงานที่รับการโอนย้าย</li>
-                               <li>พนักงานปฏิบัติงานในตําแหน่งเดียวกันมาเป็นเวลานาน</li>
-                               <li>การจัดตําแหน่งใหม่ให้กับพนักงาน</li>
-                               <li>การปรับโครงสร้างบริษัท</li>
+                               <li data-i18n="mn_ch1_sec2_l1">บริการหรือความเชี่ยวชาญที่หน่วยงานที่รับการโอนย้าย</li>
+                               <li data-i18n="mn_ch1_sec2_l2">พนักงานปฏิบัติงานในตําแหน่งเดียวกันมาเป็นเวลานาน</li>
+                               <li data-i18n="mn_ch1_sec2_l3">การจัดตําแหน่งใหม่ให้กับพนักงาน</li>
+                               <li data-i18n="mn_ch1_sec2_l4">การปรับโครงสร้างบริษัท</li>
                              </ul>
                            </ul>
                         </div>
-                        <h4 class="font-bold text-red-700 mb-3 text-lg mt-6">การทดลองงาน</h4>
+                        <h4 class="font-bold text-red-700 mb-3 text-lg mt-6" data-i18n="mn_ch1_sec3_title">การทดลองงาน</h4>
                         <ul class="list-disc list-outside ml-5 space-y-2 text-gray-700">
-                            <li><strong>ระยะเวลา:</strong> สูงสุด 119 วัน สำหรับการจ้างงานทุกประเภท</li>
-                            <li><strong>การประเมิน:</strong> ต้องมีการประเมินอย่างน้อย 1 ครั้งระหว่างทดลองงาน กับหัวหน้าแผนกและกรรมการผู้จัดการ</li>
-                            <li><strong>การบรรจุ:</strong> บริษัทจะแจ้งเป็นหนังสือ หากไม่ผ่านจะมีการแจ้งล่วงหน้า (1 รอบการจ่ายค่าจ้าง)</li>
-                            <li><strong>การยกเลิกสัญญา:</strong> บริษัทสงวนสิทธิ์เลิกจ้างทันทีหากละทิ้งงาน หรือมีพฤติกรรมไม่เหมาะสม</li>
+                            <li data-i18n="mn_ch1_sec3_l1"><strong>ระยะเวลา:</strong> สูงสุด 119 วัน สำหรับการจ้างงานทุกประเภท</li>
+                            <li data-i18n="mn_ch1_sec3_l2"><strong>การประเมิน:</strong> ต้องมีการประเมินอย่างน้อย 1 ครั้งระหว่างทดลองงาน กับหัวหน้าแผนกและกรรมการผู้จัดการ</li>
+                            <li data-i18n="mn_ch1_sec3_l3"><strong>การบรรจุ:</strong> บริษัทจะแจ้งเป็นหนังสือ หากไม่ผ่านจะมีการแจ้งล่วงหน้า (1 รอบการจ่ายค่าจ้าง)</li>
+                            <li data-i18n="mn_ch1_sec3_l4"><strong>การยกเลิกสัญญา:</strong> บริษัทสงวนสิทธิ์เลิกจ้างทันทีหากละทิ้งงาน หรือมีพฤติกรรมไม่เหมาะสม</li>
                         </ul>
                     </div>
                 </div>
@@ -664,53 +664,53 @@
                         <i data-lucide="chevron-down" id="icon-manual-2" class="w-5 h-5 text-gray-400 transition-transform duration-300"></i>
                     </button>
                     <div id="manual-2" class="hidden bg-gray-50 p-3 sm:p-6 border-t border-gray-100">
-                        <h4 class="font-bold text-red-700 mb-3 text-lg">2.1 เวลาทำงานปกติ</h4>
+                        <h4 class="font-bold text-red-700 mb-3 text-lg" data-i18n="mn_ch2_sec1_title">2.1 เวลาทำงานปกติ</h4>
                         <div class="overflow-x-auto rounded-lg border border-gray-200 shadow-sm mb-6 bg-white table-container">
                             <table class="manual-table">
                                 <thead>
                                     <tr>
-                                        <th>สถานที่ / ฝ่าย</th>
-                                        <th>วันทำงาน</th>
-                                        <th>เวลาทำงาน</th>
-                                        <th>เวลาพัก</th>
+                                        <th data-i18n="mn_ch2_table_h1">สถานที่ / ฝ่าย</th>
+                                        <th data-i18n="mn_ch2_table_h2">วันทำงาน</th>
+                                        <th data-i18n="mn_ch2_table_h3">เวลาทำงาน</th>
+                                        <th data-i18n="mn_ch2_table_h4">เวลาพัก</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td class="font-bold">สำนักงาน</td>
-                                        <td>จันทร์ - ศุกร์</td>
+                                        <td class="font-bold" data-i18n="mn_ch2_loc1">สำนักงาน</td>
+                                        <td data-i18n="mn_ch2_day1">จันทร์ - ศุกร์</td>
                                         <td>09:00 - 18:00(เริ่ม 07:00-09:00)</td>
                                         <td>12:00 - 13:00</td>
                                     </tr>
                                     <tr>
-                                        <td class="font-bold">คลังสินค้า</td>
-                                        <td>จันทร์ - ศุกร์</td>
+                                        <td class="font-bold" data-i18n="mn_ch2_loc2">คลังสินค้า</td>
+                                        <td data-i18n="mn_ch2_day1">จันทร์ - ศุกร์</td>
                                         <td>07:00 - 16:00</td>
                                         <td>12:00 - 13:00</td>
                                     </tr>
                                     <tr>
-                                        <td class="font-bold">ฝ่ายขาย</td>
-                                        <td>จันทร์ - ศุกร์ (เสาร์ตามปฏิทิน)</td>
+                                        <td class="font-bold" data-i18n="mn_ch2_loc3">ฝ่ายขาย</td>
+                                        <td data-i18n="mn_ch2_day2">จันทร์ - ศุกร์ (เสาร์ตามปฏิทิน)</td>
                                         <td>08:00 - 17:00</td>
                                         <td>12:00 - 13:00</td>
                                     </tr>
                                 </tbody>
                             </table>
-                            <p class="text-xs text-gray-500 p-2">* ชั่วโมงทำงานรายสัปดาห์ 40 ชั่วโมง (8 ชัวโมงต่อวัน) (ฝ่ายขายไม่เกิน 48 ชั่วโมง)</p>
+                            <p class="text-xs text-gray-500 p-2" data-i18n="mn_ch2_note1">* ชั่วโมงทำงานรายสัปดาห์ 40 ชั่วโมง (8 ชัวโมงต่อวัน) (ฝ่ายขายไม่เกิน 48 ชั่วโมง)</p>
                         </div>
-                        <h4 class="font-bold text-red-700 mb-3 text-lg mt-6">เงื่อนไขเพิ่มเติม</h4>
+                        <h4 class="font-bold text-red-700 mb-3 text-lg mt-6" data-i18n="mn_ch2_sec2_title">เงื่อนไขเพิ่มเติม</h4>
                         <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
                             <div class="bg-white p-4 rounded-lg border border-gray-200 shadow-sm w-full">
                                 <h5 class="font-bold text-gray-800 flex items-center gap-2 mb-2">
-                                    <i data-lucide="home" class="w-4 h-4 text-blue-500"></i> Work from Home
+                                    <i data-lucide="home" class="w-4 h-4 text-blue-500"></i> <span data-i18n="mn_ch2_wfh_title">Work from Home</span>
                                 </h5>
-                                <p class="text-sm text-gray-600">นโยบายทำงานที่บ้าน 1 วัน/สัปดาห์ (ต้องได้รับอนุมัติ) <u>ยกเว้น</u> แผนกคลังสินค้า, มาสเตอร์เซอร์วิส และฝ่ายขาย</p>
+                                <p class="text-sm text-gray-600" data-i18n="mn_ch2_wfh_desc">นโยบายทำงานที่บ้าน 1 วัน/สัปดาห์ (ต้องได้รับอนุมัติ) <u>ยกเว้น</u> แผนกคลังสินค้า, มาสเตอร์เซอร์วิส และฝ่ายขาย</p>
                             </div>
                             <div class="bg-white p-4 rounded-lg border border-gray-200 shadow-sm w-full">
                                 <h5 class="font-bold text-gray-800 flex items-center gap-2 mb-2">
-                                    <i data-lucide="clock-alert" class="w-4 h-4 text-orange-500"></i> เวลาทำงานติดลบ
+                                    <i data-lucide="clock-alert" class="w-4 h-4 text-orange-500"></i> <span data-i18n="mn_ch2_neg_title">เวลาทำงานติดลบ</span>
                                 </h5>
-                                <p class="text-sm text-gray-600">สิ้นเดือนหากชั่วโมงทำงานติดลบ จะถูกหักวันลาพักร้อนอย่างน้อย 0.5 วัน หากวันลาหมดจะมีผลทางวินัย</p>
+                                <p class="text-sm text-gray-600" data-i18n="mn_ch2_neg_desc">สิ้นเดือนหากชั่วโมงทำงานติดลบ จะถูกหักวันลาพักร้อนอย่างน้อย 0.5 วัน หากวันลาหมดจะมีผลทางวินัย</p>
                             </div>
                         </div>
                     </div>
@@ -728,61 +728,61 @@
                         <div class="space-y-6">
                             <div>
                                 <h4 class="font-bold text-red-700 mb-2 flex items-center gap-2">
-                                    <i data-lucide="file-warning" class="w-5 h-5"></i> 3.1 การสิ้นสุดการจ้างงาน
+                                    <i data-lucide="file-warning" class="w-5 h-5"></i> <span data-i18n="mn_ch3_sec1_title">3.1 การสิ้นสุดการจ้างงาน</span>
                                 </h4>
                                 <div class="bg-white p-4 rounded-lg border border-gray-200 shadow-sm text-sm text-gray-700 space-y-3">
-                                    <p>คู่สัญญาต้องบอกกล่าวล่วงหน้าเป็นหนังสือ <strong>1 รอบการจ่ายค่าจ้าง</strong> (1 เดือน) หรือจ่ายสินจ้างแทนการบอกกล่าว</p>
+                                    <p data-i18n="mn_ch3_sec1_desc">คู่สัญญาต้องบอกกล่าวล่วงหน้าเป็นหนังสือ <strong>1 รอบการจ่ายค่าจ้าง</strong> (1 เดือน) หรือจ่ายสินจ้างแทนการบอกกล่าว</p>
                                     <ul class="list-disc list-outside ml-5 text-gray-600">
-                                        <li>ช่วงทดลองงาน: บอกกล่าว 1 เดือน</li>
-                                        <li>พนักงานบรรจุ: บอกกล่าว 1 เดือน</li>
+                                        <li data-i18n="mn_ch3_sec1_l1">ช่วงทดลองงาน: บอกกล่าว 1 เดือน</li>
+                                        <li data-i18n="mn_ch3_sec1_l2">พนักงานบรรจุ: บอกกล่าว 1 เดือน</li>
                                     </ul>
-                                    <p class="text-xs text-red-600">* บริษัทขอสงวนสิทธิ์เลิกจ้างทันทีหากปฏิบัติงานไม่มีคุณภาพ, ผิดวินัย, หรือมีพฤติกรรมที่เป็นอันตราย</p>
+                                    <p class="text-xs text-red-600" data-i18n="mn_ch3_sec1_note">* บริษัทขอสงวนสิทธิ์เลิกจ้างทันทีหากปฏิบัติงานไม่มีคุณภาพ, ผิดวินัย, หรือมีพฤติกรรมที่เป็นอันตราย</p>
                                 </div>
                             </div>
                             <div>
                                 <h4 class="font-bold text-red-700 mb-2 flex items-center gap-2">
-                                    <i data-lucide="list-checks" class="w-5 h-5"></i> 3.2 ขั้นตอนการเลิกจ้าง
+                                    <i data-lucide="list-checks" class="w-5 h-5"></i> <span data-i18n="mn_ch3_sec2_title">3.2 ขั้นตอนการเลิกจ้าง</span>
                                 </h4>
                                 <div class="bg-white p-4 rounded-lg border border-gray-200 shadow-sm text-sm text-gray-700">
                                     <ul class="space-y-2">
                                         <li class="flex items-start gap-2">
                                             <i data-lucide="check-square" class="w-4 h-4 text-green-500 mt-0.5"></i>
-                                            <span>คืนทรัพย์สินทั้งหมดของบริษัท</span>
+                                            <span data-i18n="mn_ch3_sec2_l1">คืนทรัพย์สินทั้งหมดของบริษัท</span>
                                         </li>
                                         <li class="flex items-start gap-2">
                                             <i data-lucide="check-square" class="w-4 h-4 text-green-500 mt-0.5"></i>
-                                            <span>ชำระหนี้สินคงค้างทั้งหมด</span>
+                                            <span data-i18n="mn_ch3_sec2_l2">ชำระหนี้สินคงค้างทั้งหมด</span>
                                         </li>
                                         <li class="flex items-start gap-2">
                                             <i data-lucide="gift" class="w-4 h-4 text-orange-500 mt-0.5"></i>
-                                            <span>สิทธิรับเงินค่าวันหยุดพักผ่อนที่ไม่ได้ใช้ (หากปฏิบัติตามขั้นตอนครบถ้วน)</span>
+                                            <span data-i18n="mn_ch3_sec2_l3">สิทธิรับเงินค่าวันหยุดพักผ่อนที่ไม่ได้ใช้ (หากปฏิบัติตามขั้นตอนครบถ้วน)</span>
                                         </li>
                                     </ul>
                                 </div>
                             </div>
                             <div>
                                 <h4 class="font-bold text-red-700 mb-2 flex items-center gap-2">
-                                    <i data-lucide="user-x" class="w-5 h-5"></i> 3.3 การละทิ้งงาน
+                                    <i data-lucide="user-x" class="w-5 h-5"></i> <span data-i18n="mn_ch3_sec3_title">3.3 การละทิ้งงาน</span>
                                 </h4>
                                 <div class="bg-red-50 p-4 rounded-lg border border-red-100 text-sm text-red-800">
-                                    <p>การขาดงานโดยไม่แจ้งหรือไม่มีเหตุอันสมควรติดต่อกัน <strong>3 วันทำการ</strong> ถือว่าละทิ้งงาน อาจนำไปสู่การเลิกจ้างทันทีและอาจถูกหักค่าจ้าง</p>
+                                    <p data-i18n="mn_ch3_sec3_desc">การขาดงานโดยไม่แจ้งหรือไม่มีเหตุอันสมควรติดต่อกัน <strong>3 วันทำการ</strong> ถือว่าละทิ้งงาน อาจนำไปสู่การเลิกจ้างทันทีและอาจถูกหักค่าจ้าง</p>
                                 </div>
                             </div>
                             <div>
                                 <h4 class="font-bold text-red-700 mb-2 flex items-center gap-2">
-                                    <i data-lucide="hourglass" class="w-5 h-5"></i> 3.4 เกษียณอายุ
+                                    <i data-lucide="hourglass" class="w-5 h-5"></i> <span data-i18n="mn_ch3_sec4_title">3.4 เกษียณอายุ</span>
                                 </h4>
                                 <div class="bg-white p-4 rounded-lg border border-gray-200 shadow-sm text-sm text-gray-700">
-                                    <p>เกษียณอายุอย่างเป็นทางการใน <strong>วันครบรอบวันเกิดปีที่ 60</strong> (สิ้นสุดวันสุดท้ายของเดือนเกิด)</p>
-                                    <p class="text-xs text-gray-500 mt-1">* บริษัทอาจเสนอจ้างงานต่อได้ตามดุลพินิจ</p>
+                                    <p data-i18n="mn_ch3_sec4_desc">เกษียณอายุอย่างเป็นทางการใน <strong>วันครบรอบวันเกิดปีที่ 60</strong> (สิ้นสุดวันสุดท้ายของเดือนเกิด)</p>
+                                    <p class="text-xs text-gray-500 mt-1" data-i18n="mn_ch3_sec4_note">* บริษัทอาจเสนอจ้างงานต่อได้ตามดุลพินิจ</p>
                                 </div>
                             </div>
                             <div>
                                 <h4 class="font-bold text-red-700 mb-2 flex items-center gap-2">
-                                    <i data-lucide="message-circle" class="w-5 h-5"></i> 3.5 การสัมภาษณ์พนักงานที่ออก
+                                    <i data-lucide="message-circle" class="w-5 h-5"></i> <span data-i18n="mn_ch3_sec5_title">3.5 การสัมภาษณ์พนักงานที่ออก</span>
                                 </h4>
                                 <div class="bg-white p-4 rounded-lg border border-gray-200 shadow-sm text-sm text-gray-700">
-                                    <p>พนักงานอาจต้องเข้ารับการสัมภาษณ์กับ <strong>หัวหน้าแผนก</strong> หรือ <strong>ฝ่ายบริหารอาวุโส</strong> เมื่อสิ้นสุดการจ้างงาน</p>
+                                    <p data-i18n="mn_ch3_sec5_desc">พนักงานอาจต้องเข้ารับการสัมภาษณ์กับ <strong>หัวหน้าแผนก</strong> หรือ <strong>ฝ่ายบริหารอาวุโส</strong> เมื่อสิ้นสุดการจ้างงาน</p>
                                 </div>
                             </div>
                         </div>
@@ -800,29 +800,29 @@
                     <div id="manual-4" class="hidden bg-gray-50 p-3 sm:p-6 border-t border-gray-100">
                         <div class="space-y-6">
                             <div>
-                                <h4 class="font-bold text-red-700 mb-2">4.1 ประกันชีวิตและสุขภาพ (Group Insurance)</h4>
+                                <h4 class="font-bold text-red-700 mb-2" data-i18n="mn_ch4_sec1_title">4.1 ประกันชีวิตและสุขภาพ (Group Insurance)</h4>
                                 <ul class="list-disc list-outside ml-5 space-y-2 text-sm text-gray-700">
-                                    <li>มีผลบังคับใช้เมื่อ<strong>ผ่านการทดลองงาน</strong>แล้ว</li>
-                                    <li>วงเงินคุ้มครอง OPD/IPD ขึ้นอยู่กับแผนประกันที่บริษัทจัดให้</li>
-                                    <li>มีสวัสดิการตรวจสุขภาพประจำปี</li>
+                                    <li data-i18n="mn_ch4_sec1_l1">มีผลบังคับใช้เมื่อ<strong>ผ่านการทดลองงาน</strong>แล้ว</li>
+                                    <li data-i18n="mn_ch4_sec1_l2">วงเงินคุ้มครอง OPD/IPD ขึ้นอยู่กับแผนประกันที่บริษัทจัดให้</li>
+                                    <li data-i18n="mn_ch4_sec1_l3">มีสวัสดิการตรวจสุขภาพประจำปี</li>
                                 </ul>
                             </div>
                             <div class="overflow-x-auto rounded-lg border border-gray-200 shadow-sm bg-white table-container">
                                 <table class="manual-table">
                                     <thead>
                                         <tr>
-                                            <th>สวัสดิการ</th>
-                                            <th>วงเงิน / รายละเอียด</th>
+                                            <th data-i18n="mn_ch4_table_h1">สวัสดิการ</th>
+                                            <th data-i18n="mn_ch4_table_h2">วงเงิน / รายละเอียด</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr>
-                                            <td class="font-bold flex items-center gap-2"><i data-lucide="smile" class="w-4 h-4 text-blue-500"></i> ทันตกรรม</td>
-                                            <td><span class="font-semibold">รวม 4,000 บาท/ปี</span></td>
+                                            <td class="font-bold flex items-center gap-2"><i data-lucide="smile" class="w-4 h-4 text-blue-500"></i> <span data-i18n="mn_ch4_den">ทันตกรรม</span></td>
+                                            <td data-i18n="mn_ch4_den_desc"><span class="font-semibold">รวม 4,000 บาท/ปี</span></td>
                                         </tr>
                                         <tr>
-                                            <td class="font-bold flex items-center gap-2"><i data-lucide="glasses" class="w-4 h-4 text-indigo-500"></i> จักษุวิทยา</td>
-                                            <td><span class="font-semibold">สูงสุด 4,000 บาท/ปี</span> (เฉพาะเลนส์-ไม่รวมกรอบแว่น)</td>
+                                            <td class="font-bold flex items-center gap-2"><i data-lucide="glasses" class="w-4 h-4 text-indigo-500"></i> <span data-i18n="mn_ch4_opt">จักษุวิทยา</span></td>
+                                            <td data-i18n="mn_ch4_opt_desc"><span class="font-semibold">สูงสุด 4,000 บาท/ปี</span> (เฉพาะเลนส์-ไม่รวมกรอบแว่น)</td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -844,90 +844,90 @@
                             <!-- 1.1 Domestic Travel -->
                             <div>
                                 <h4 class="font-bold text-red-700 mb-3 flex items-center gap-2">
-                                    <i data-lucide="map-pin" class="w-5 h-5"></i> 5.1 การเบิกค่าใช้จ่ายในการเดินทาง (ในประเทศ)
+                                    <i data-lucide="map-pin" class="w-5 h-5"></i> <span data-i18n="mn_ch5_sec1_title">5.1 การเบิกค่าใช้จ่ายในการเดินทาง (ในประเทศ)</span>
                                 </h4>
                                 <div class="overflow-x-auto rounded-lg border border-gray-200 shadow-sm mb-4 bg-white table-container">
                                     <table class="manual-table">
                                         <thead>
                                             <tr>
-                                                <th>ประเภทพนักงาน</th>
-                                                <th>ยานพาหนะ</th>
-                                                <th>อัตราเบิก (บาท/กม.)</th>
+                                                <th data-i18n="mn_ch5_table1_h1">ประเภทพนักงาน</th>
+                                                <th data-i18n="mn_ch5_table1_h2">ยานพาหนะ</th>
+                                                <th data-i18n="mn_ch5_table1_h3">อัตราเบิก (บาท/กม.)</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <tr>
-                                                <td rowspan="2" class="font-semibold">พนักงานภายใน</td>
-                                                <td>รถยนต์</td>
+                                                <td rowspan="2" class="font-semibold" data-i18n="mn_ch5_emp1">พนักงานภายใน</td>
+                                                <td data-i18n="mn_ch5_veh1">รถยนต์</td>
                                                 <td>8</td>
                                             </tr>
                                             <tr>
-                                                <td>รถจักรยานยนต์</td>
+                                                <td data-i18n="mn_ch5_veh2">รถจักรยานยนต์</td>
                                                 <td>5</td>
                                             </tr>
                                             <tr>
-                                                <td class="font-semibold">พนักงานฝ่ายขาย</td>
-                                                <td>รถยนต์</td>
-                                                <td>3 (ต้องขออนุมัติ หรือใช้ Fleet Card)</td>
+                                                <td class="font-semibold" data-i18n="mn_ch5_emp2">พนักงานฝ่ายขาย</td>
+                                                <td data-i18n="mn_ch5_veh1">รถยนต์</td>
+                                                <td data-i18n="mn_ch5_rate1">3 (ต้องขออนุมัติ หรือใช้ Fleet Card)</td>
                                             </tr>
                                         </tbody>
                                     </table>
                                 </div>
                                 <ul class="list-disc list-outside ml-5 space-y-1 text-sm text-gray-700">
-                                    <li><strong>เงื่อนไข</strong> บริษัทสนับสนุนค่าใช้จ่ายในการเดินทางสําหรับพนักงานที่ต้องการเดินทางเพื่อวัตถุประสงค์ทางธุรกิจเท่านั้น </li>
-                                    <li><strong>รถยนต์ไฟฟ้า (EV):</strong> เบิกตามค่าชาร์จจริง (ต้องมีหลักฐาน)</li>
-                                    <li><strong>ทางด่วน/จอดรถ:</strong> เบิกตามจริง (ต้องมีใบเสร็จ)</li>
+                                    <li data-i18n="mn_ch5_sec1_l1"><strong>เงื่อนไข</strong> บริษัทสนับสนุนค่าใช้จ่ายในการเดินทางสําหรับพนักงานที่ต้องการเดินทางเพื่อวัตถุประสงค์ทางธุรกิจเท่านั้น </li>
+                                    <li data-i18n="mn_ch5_sec1_l2"><strong>รถยนต์ไฟฟ้า (EV):</strong> เบิกตามค่าชาร์จจริง (ต้องมีหลักฐาน)</li>
+                                    <li data-i18n="mn_ch5_sec1_l3"><strong>ทางด่วน/จอดรถ:</strong> เบิกตามจริง (ต้องมีใบเสร็จ)</li>
                                 </ul>
                             </div>
                             <!--1.3 นโยบายการใช้มือถือ-->
                             <div class="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
                                 <h4 class="font-bold text-red-700 mb-2 flex items-center gap-2">
-                                    <i data-lucide="file-check" class="w-5 h-5"></i> 5.2 นโยบายโทรศัพท์มือถือและอุปกรณ์อิเล็กทรอนิกส์ 
+                                    <i data-lucide="file-check" class="w-5 h-5"></i> <span data-i18n="mn_ch5_sec2_title">5.2 นโยบายโทรศัพท์มือถือและอุปกรณ์อิเล็กทรอนิกส์</span>
                                 </h4>
                                 <ul class="list-disc list-outside ml-5 text-sm text-gray-700 space-y-2">
-                                    <li><strong>สิทธิ์การใช้งานตามความจำเป็น:</strong> บริษัทจะจัดสรรอุปกรณ์ (มือถือ, แล็ปท็อป, ไอแพด) และเบอร์โทรศัพท์ให้ตามความเหมาะสมของตำแหน่งงาน โดยการพิจารณาของฝ่ายบริหาร</li>
-                                    <li><strong>กรรมสิทธิ์และวัตถุประสงค์:</strong> อุปกรณ์ เบอร์โทรศัพท์ และบัญชีใช้งานทั้งหมด (Apple ID, LINE ฯลฯ) ถือเป็น<strong>ทรัพย์สินของบริษัท</strong>ให้ใช้เพื่อวัตถุประสงค์ทางธุรกิจเท่านั้น</li>
-                                    <li><strong>ข้อห้ามในการจัดการบัญชี:</strong>ห้ามแก้ไขการตั้งค่า (รหัสผ่าน/อีเมล) ห้ามลบข้อมูลลูกค้าหรือประวัติการสนทนา และห้ามโอนสิทธิ์การเข้าถึงบัญชีโดยเด็ดขาด</li>
-                                    <li><strong>บทลงโทษทางวินัย:</strong> การแก้ไขหรือลบข้อมูลโดยไม่ได้รับอนุญาตถือเป็น ความผิดวินัยร้ายแรง ซึ่งอาจส่งผลให้ถูกดำเนินการทางวินัยหรือเลิกจ้างได้</li>
+                                    <li data-i18n="mn_ch5_sec2_l1"><strong>สิทธิ์การใช้งานตามความจำเป็น:</strong> บริษัทจะจัดสรรอุปกรณ์ (มือถือ, แล็ปท็อป, ไอแพด) และเบอร์โทรศัพท์ให้ตามความเหมาะสมของตำแหน่งงาน โดยการพิจารณาของฝ่ายบริหาร</li>
+                                    <li data-i18n="mn_ch5_sec2_l2"><strong>กรรมสิทธิ์และวัตถุประสงค์:</strong> อุปกรณ์ เบอร์โทรศัพท์ และบัญชีใช้งานทั้งหมด (Apple ID, LINE ฯลฯ) ถือเป็น<strong>ทรัพย์สินของบริษัท</strong>ให้ใช้เพื่อวัตถุประสงค์ทางธุรกิจเท่านั้น</li>
+                                    <li data-i18n="mn_ch5_sec2_l3"><strong>ข้อห้ามในการจัดการบัญชี:</strong>ห้ามแก้ไขการตั้งค่า (รหัสผ่าน/อีเมล) ห้ามลบข้อมูลลูกค้าหรือประวัติการสนทนา และห้ามโอนสิทธิ์การเข้าถึงบัญชีโดยเด็ดขาด</li>
+                                    <li data-i18n="mn_ch5_sec2_l4"><strong>บทลงโทษทางวินัย:</strong> การแก้ไขหรือลบข้อมูลโดยไม่ได้รับอนุญาตถือเป็น ความผิดวินัยร้ายแรง ซึ่งอาจส่งผลให้ถูกดำเนินการทางวินัยหรือเลิกจ้างได้</li>
                                 </ul>
                             </div>
                             <!-- 1.5.1 Travel Class -->
-                            <h5 class="font-bold text-gray-800 mb-2 text-sm ml-2">5.3.1 ชั้นการเดินทางและสิทธิการเบิก</h5>
+                            <h5 class="font-bold text-gray-800 mb-2 text-sm ml-2" data-i18n="mn_ch5_sec3_1_title">5.3.1 ชั้นการเดินทางและสิทธิการเบิก</h5>
                             <div class="overflow-x-auto rounded-lg border border-gray-200 shadow-sm mb-4 bg-white table-container">
                                 <table class="manual-table">
                                     <thead>
                                         <tr>
-                                            <th>รายการ</th>
-                                            <th>สิทธิที่เบิกได้</th>
+                                            <th data-i18n="mn_ch5_table2_h1">รายการ</th>
+                                            <th data-i18n="mn_ch5_table2_h2">สิทธิที่เบิกได้</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr>
-                                            <td class="font-semibold">พนักงานภายใน <br><span class="text-xs font-normal text-gray-500">(ที่ไม่ได้รับฟลีทการ์ด)</span></td>
-                                            <td>
+                                            <td class="font-semibold" data-i18n="mn_ch5_t2_r1_c1">พนักงานภายใน <br><span class="text-xs font-normal text-gray-500">(ที่ไม่ได้รับฟลีทการ์ด)</span></td>
+                                            <td data-i18n="mn_ch5_t2_r1_c2">
                                                 <div class="mb-1">รถยนต์: 8 บาท/กม.</div>
                                                 <div>รถจักรยานยนต์: 5 บาท/กม.</div>
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td class="font-semibold">พนักงานฝ่ายขาย</td>
-                                            <td>อนุมัติจากผู้อำนวยการฝ่ายขายก่อนเท่านั้น</td>
+                                            <td class="font-semibold" data-i18n="mn_ch5_t2_r2_c1">พนักงานฝ่ายขาย</td>
+                                            <td data-i18n="mn_ch5_t2_r2_c2">อนุมัติจากผู้อำนวยการฝ่ายขายก่อนเท่านั้น</td>
                                         </tr>
                                         <tr>
-                                            <td>แท็กซี่</td>
-                                            <td>ตามใบเสร็จ</td>
+                                            <td data-i18n="mn_ch5_t2_taxi">แท็กซี่</td>
+                                            <td data-i18n="mn_ch5_t2_taxi_r">ตามใบเสร็จ</td>
                                         </tr>
                                         <tr>
-                                            <td>การบิน</td>
-                                            <td>ชั้นประหยัด</td>
+                                            <td data-i18n="mn_ch5_t2_flight">การบิน</td>
+                                            <td data-i18n="mn_ch5_t2_flight_r">ชั้นประหยัด</td>
                                         </tr>
                                         <tr>
-                                            <td>ภาษีสนามบิน</td>
-                                            <td>ตามใบเสร็จ</td>
+                                            <td data-i18n="mn_ch5_t2_tax">ภาษีสนามบิน</td>
+                                            <td data-i18n="mn_ch5_t2_tax_r">ตามใบเสร็จ</td>
                                         </tr>
                                         <tr>
-                                            <td>ค่าผ่านทางและที่จอดรถ</td>
-                                            <td>ตามใบเสร็จ</td>
+                                            <td data-i18n="mn_ch5_t2_toll">ค่าผ่านทางและที่จอดรถ</td>
+                                            <td data-i18n="mn_ch5_t2_toll_r">ตามใบเสร็จ</td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -935,43 +935,43 @@
                             <!-- 1.5.7 & 1.5.8 Allowances --> 
                             <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 text-sm">
                                 <div class="bg-white p-3 rounded border border-gray-200 w-full">
-                                    <p class="font-bold text-gray-800">5.3.2 เบี้ยเลี้ยง (Per Diem)</p>
+                                    <p class="font-bold text-gray-800" data-i18n="mn_ch5_sec3_2_title">5.3.2 เบี้ยเลี้ยง (Per Diem)</p>
                                     <ul class="mt-1 space-y-1 text-gray-600">
-                                        <li>ในประเทศ: <strong>270 บาท/วัน</strong> (เฉพาะพนักงานภายใน)</li>
-                                        <li>ต่างประเทศ: <strong>500 บาท/วัน</strong> (ค่าของว่าง/เครื่องดื่ม) + ค่าอาหารตามจริง (สูงสุด 3,100)</li>
+                                        <li data-i18n="mn_ch5_sec3_2_l1">ในประเทศ: <strong>270 บาท/วัน</strong> (เฉพาะพนักงานภายใน)</li>
+                                        <li data-i18n="mn_ch5_sec3_2_l2">ต่างประเทศ: <strong>500 บาท/วัน</strong> (ค่าของว่าง/เครื่องดื่ม) + ค่าอาหารตามจริง (สูงสุด 3,100)</li>
                                     </ul>
                                 </div>
                                 <div class="bg-white p-3 rounded border border-gray-200 w-full">
-                                    <p class="font-bold text-gray-800">5.3.3 ค่าที่พัก (Accommodation)</p>
+                                    <p class="font-bold text-gray-800" data-i18n="mn_ch5_sec3_3_title">5.3.3 ค่าที่พัก (Accommodation)</p>
                                     <ul class="mt-1 space-y-1 text-gray-600">
-                                        <li>ในประเทศ: <strong>550 บาท/คืน</strong> (หรือโรงแรมพันธมิตร)</li>
-                                        <li>ต่างประเทศ: ตามเรทเมืองที่ไป (จองผ่านธุรการ)</li>
-                                        <li>ห้ามชาย-หญิงพักห้องเดียวกัน</li>
+                                        <li data-i18n="mn_ch5_sec3_3_l1">ในประเทศ: <strong>550 บาท/คืน</strong> (หรือโรงแรมพันธมิตร)</li>
+                                        <li data-i18n="mn_ch5_sec3_3_l2">ต่างประเทศ: ตามเรทเมืองที่ไป (จองผ่านธุรการ)</li>
+                                        <li data-i18n="mn_ch5_sec3_3_l3">ห้ามชาย-หญิงพักห้องเดียวกัน</li>
                                     </ul>
                                 </div>
                             </div>
                             <!-- 1.6 Conditions -->
                             <div class="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
                                 <h4 class="font-bold text-red-700 mb-2 flex items-center gap-2">
-                                    <i data-lucide="file-check" class="w-5 h-5"></i> 5.4 เงื่อนไขการขอเบิกค่าใช้จ่าย
+                                    <i data-lucide="file-check" class="w-5 h-5"></i> <span data-i18n="mn_ch5_sec4_title">5.4 เงื่อนไขการขอเบิกค่าใช้จ่าย</span>
                                 </h4>
                                 <ul class="list-disc list-outside ml-5 text-sm text-gray-700 space-y-2">
-                                    <li>ค่าเดินทางยื่นอย่างช้าที่สุดในเดือนถัดไป</li>
-                                    <li>ส่งใบขอเบิกพร้อมใบเสร็จต้นฉบับที่แผนกบัญชี <strong>ก่อนวันที่ 22 ของเดือน</strong></li>
-                                    <li>หากเกินกำหนดจะถูกนำไปจ่ายในรอบเดือนถัดไป</li>
-                                    <li>บริษัทสงวนสิทธิ์ปฏิเสธการจ่ายหากไม่มีเอกสารตัวจริง</li>
+                                    <li data-i18n="mn_ch5_sec4_l1">ค่าเดินทางยื่นอย่างช้าที่สุดในเดือนถัดไป</li>
+                                    <li data-i18n="mn_ch5_sec4_l2">ส่งใบขอเบิกพร้อมใบเสร็จต้นฉบับที่แผนกบัญชี <strong>ก่อนวันที่ 22 ของเดือน</strong></li>
+                                    <li data-i18n="mn_ch5_sec4_l3">หากเกินกำหนดจะถูกนำไปจ่ายในรอบเดือนถัดไป</li>
+                                    <li data-i18n="mn_ch5_sec4_l4">บริษัทสงวนสิทธิ์ปฏิเสธการจ่ายหากไม่มีเอกสารตัวจริง</li>
                                 </ul>
                             </div>
                             <!-- 1.8 Training -->
                             <div class="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
                                 <h4 class="font-bold text-red-700 mb-2 flex items-center gap-2">
-                                    <i data-lucide="graduation-cap" class="w-5 h-5"></i> 5.5 การฝึกอบรมและการพัฒนา
+                                    <i data-lucide="graduation-cap" class="w-5 h-5"></i> <span data-i18n="mn_ch5_sec5_title">5.5 การฝึกอบรมและการพัฒนา</span>
                                 </h4>
                                 <ul class="list-disc list-outside ml-5 text-sm text-gray-700 space-y-2">
-                                    <li>สิทธิเข้าร่วมอบรมสูงสุด <strong>40 ชั่วโมงต่อปี</strong> (รวมภายใน/ภายนอก)</li>
-                                    <li>พนักงานที่ยื่นใบลาออก/ถูกสอบสวน ไม่มีสิทธิอบรม</li>
-                                    <li>อาจต้องลงนามใน <strong>ข้อตกลงสัญญาค้ำประกัน</strong> สำหรับการอบรมที่บริษัทคัดเลือกให้</li>
-                                    <li>ต้องส่งแบบประเมินผลการอบรมให้ HR ภายใน 2 วันทำการหลังอบรมจบ</li>
+                                    <li data-i18n="mn_ch5_sec5_l1">สิทธิเข้าร่วมอบรมสูงสุด <strong>40 ชั่วโมงต่อปี</strong> (รวมภายใน/ภายนอก)</li>
+                                    <li data-i18n="mn_ch5_sec5_l2">พนักงานที่ยื่นใบลาออก/ถูกสอบสวน ไม่มีสิทธิอบรม</li>
+                                    <li data-i18n="mn_ch5_sec5_l3">อาจต้องลงนามใน <strong>ข้อตกลงสัญญาค้ำประกัน</strong> สำหรับการอบรมที่บริษัทคัดเลือกให้</li>
+                                    <li data-i18n="mn_ch5_sec5_l4">ต้องส่งแบบประเมินผลการอบรมให้ HR ภายใน 2 วันทำการหลังอบรมจบ</li>
                                 </ul>
                             </div>
                         </div>
@@ -991,38 +991,38 @@
                             <!-- Salary -->
                             <div>
                                 <h4 class="font-bold text-red-700 mb-2 flex items-center gap-2">
-                                    <i data-lucide="banknote" class="w-5 h-5"></i> 6.1 การจ่ายเงินเดือน
+                                    <i data-lucide="banknote" class="w-5 h-5"></i> <span data-i18n="mn_ch6_sec1_title">6.1 การจ่ายเงินเดือน</span>
                                 </h4>
-                                <p class="text-sm text-gray-700">จ่ายใน <strong>วันศุกร์สุดท้ายของเดือน</strong> (หรือวันทำการสุดท้ายหากตรงกับวันหยุด)</p>
+                                <p class="text-sm text-gray-700" data-i18n="mn_ch6_sec1_desc">จ่ายใน <strong>วันศุกร์สุดท้ายของเดือน</strong> (หรือวันทำการสุดท้ายหากตรงกับวันหยุด)</p>
                             </div>
                             <!-- Provident Fund -->
                             <div>
                                 <h4 class="font-bold text-red-700 mb-3 flex items-center gap-2">
-                                    <i data-lucide="piggy-bank" class="w-5 h-5"></i> 6.2 กองทุนสำรองเลี้ยงชีพ (EPF)
+                                    <i data-lucide="piggy-bank" class="w-5 h-5"></i> <span data-i18n="mn_ch6_sec2_title">6.2 กองทุนสำรองเลี้ยงชีพ (EPF)</span>
                                 </h4>
                                 <div class="overflow-x-auto rounded-lg border border-gray-200 shadow-sm bg-white table-container">
                                     <table class="manual-table">
                                         <thead>
                                             <tr>
-                                                <th>อายุงาน</th>
-                                                <th>เงินสมทบ (บริษัท)</th>
-                                                <th>เงินสะสม (พนักงาน)</th>
+                                                <th data-i18n="mn_ch6_table1_h1">อายุงาน</th>
+                                                <th data-i18n="mn_ch6_table1_h2">เงินสมทบ (บริษัท)</th>
+                                                <th data-i18n="mn_ch6_table1_h3">เงินสะสม (พนักงาน)</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <tr>
-                                                <td>&lt; 2 ปี</td>
+                                                <td data-i18n="mn_ch6_t1_1">&lt; 2 ปี</td>
                                                 <td>5%</td>
                                                 <td>5 - 15%</td>
                                             </tr>
                                             <tr>
-                                                <td>2 - &lt; 5 ปี</td>
-                                                <td>สูงสุด 8%</td>
+                                                <td data-i18n="mn_ch6_t1_2">2 - &lt; 5 ปี</td>
+                                                <td data-i18n="mn_ch6_t1_c1">สูงสุด 8%</td>
                                                 <td>5 - 15%</td>
                                             </tr>
                                             <tr>
-                                                <td>&ge; 5 ปี</td>
-                                                <td>สูงสุด 10%</td>
+                                                <td data-i18n="mn_ch6_t1_3">&ge; 5 ปี</td>
+                                                <td data-i18n="mn_ch6_t1_c2">สูงสุด 10%</td>
                                                 <td>5 - 15%</td>
                                             </tr>
                                         </tbody>
@@ -1032,45 +1032,45 @@
                             <!-- 1.5 Salary Increase & Bonus -->
                             <div>
                                 <h4 class="font-bold text-red-700 mb-2 flex items-center gap-2">
-                                    <i data-lucide="trending-up" class="w-5 h-5"></i> 6.5 การขึ้นเงินเดือนและโบนัส
+                                    <i data-lucide="trending-up" class="w-5 h-5"></i> <span data-i18n="mn_ch6_sec5_title">6.5 การขึ้นเงินเดือนและโบนัส</span>
                                 </h4>
                                 <div class="bg-white p-4 rounded-lg border border-gray-200 text-sm text-gray-700 space-y-2 shadow-sm">
-                                    <p>ขึ้นอยู่กับ <strong>ดุลพินิจของบริษัท</strong> และผลการปฏิบัติงานประจำปี โดยพิจารณาจาก:</p>
+                                    <p data-i18n="mn_ch6_sec5_desc">ขึ้นอยู่กับ <strong>ดุลพินิจของบริษัท</strong> และผลการปฏิบัติงานประจำปี โดยพิจารณาจาก:</p>
                                     <ul class="list-disc list-outside ml-5 text-gray-600">
-                                        <li>การปรับปรุงผลงาน</li>
-                                        <li>ความน่าเชื่อถือและทัศนคติ</li>
-                                        <li>ความร่วมมือและการปฏิบัติตามวินัย</li>
-                                        <li>การประเมินผลการปฏิบัติงานประจําปี</li>
+                                        <li data-i18n="mn_ch6_sec5_l1">การปรับปรุงผลงาน</li>
+                                        <li data-i18n="mn_ch6_sec5_l2">ความน่าเชื่อถือและทัศนคติ</li>
+                                        <li data-i18n="mn_ch6_sec5_l3">ความร่วมมือและการปฏิบัติตามวินัย</li>
+                                        <li data-i18n="mn_ch6_sec5_l4">การประเมินผลการปฏิบัติงานประจําปี</li>
                                     </ul>
-                                    <p class="text-xs text-gray-500 mt-2">* ไม่ถือเป็นสิทธิตามกฎหมายที่ต้องได้รับทุกปี</p>
+                                    <p class="text-xs text-gray-500 mt-2" data-i18n="mn_ch6_sec5_note">* ไม่ถือเป็นสิทธิตามกฎหมายที่ต้องได้รับทุกปี</p>
                                 </div>
                             </div>
                             <!-- 1.6 OT -->
                             <div>
                                 <h4 class="font-bold text-red-700 mb-3 flex items-center gap-2">
-                                    <i data-lucide="clock" class="w-5 h-5"></i> 6.6 การทำงานล่วงเวลา (OT)
+                                    <i data-lucide="clock" class="w-5 h-5"></i> <span data-i18n="mn_ch6_sec6_title">6.6 การทำงานล่วงเวลา (OT)</span>
                                 </h4>
                                 <!-- Rates Table -->
                                 <div class="overflow-x-auto rounded-lg border border-gray-200 shadow-sm bg-white mb-4 table-container">
                                     <table class="manual-table">
                                         <thead>
                                             <tr>
-                                                <th>ประเภทการทำงาน</th>
-                                                <th>อัตราค่าตอบแทน (เงินเดือนต่อชั่วโมง)</th>
+                                                <th data-i18n="mn_ch6_table2_h1">ประเภทการทำงาน</th>
+                                                <th data-i18n="mn_ch6_table2_h2">อัตราค่าตอบแทน (เงินเดือนต่อชั่วโมง)</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <tr>
-                                                <td>ล่วงเวลาในวันทำงานปกติ</td>
-                                                <td><span class="font-bold text-red-600">1.5 เท่า</span></td>
+                                                <td data-i18n="mn_ch6_t2_r1_c1">ล่วงเวลาในวันทำงานปกติ</td>
+                                                <td data-i18n="mn_ch6_t2_r1_c2"><span class="font-bold text-red-600">1.5 เท่า</span></td>
                                             </tr>
                                             <tr>
-                                                <td>ทำงานในวันหยุด (เวลาปกติ)</td>
-                                                <td><span class="font-bold text-red-600">1-2 เท่า</span></td>
+                                                <td data-i18n="mn_ch6_t2_r2_c1">ทำงานในวันหยุด (เวลาปกติ)</td>
+                                                <td data-i18n="mn_ch6_t2_r2_c2"><span class="font-bold text-red-600">1-2 เท่า</span></td>
                                             </tr>
                                             <tr>
-                                                <td>ล่วงเวลาในวันหยุด</td>
-                                                <td><span class="font-bold text-red-600">3 เท่า</span></td>
+                                                <td data-i18n="mn_ch6_t2_r3_c1">ล่วงเวลาในวันหยุด</td>
+                                                <td data-i18n="mn_ch6_t2_r3_c2"><span class="font-bold text-red-600">3 เท่า</span></td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -1078,18 +1078,18 @@
                                 <!-- Conditions -->
                                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 text-sm">
                                     <div class="bg-red-50 p-3 rounded border border-red-100 w-full">
-                                        <span class="font-bold text-red-800 block mb-1">ข้อยกเว้น (ไม่นับเป็น OT)</span>
+                                        <span class="font-bold text-red-800 block mb-1" data-i18n="mn_ch6_exc_title">ข้อยกเว้น (ไม่นับเป็น OT)</span>
                                         <ul class="list-disc list-outside ml-4 text-red-700 space-y-1">
-                                            <li>ช่วงเวลาพัก</li>
-                                            <li>วันลาป่วย / วันพักผ่อนประจำปีและการขาดงานอื่นๆ</li>
-                                            <li>การเข้าร่วมฝึกอบรมในวันหยุด</li>
+                                            <li data-i18n="mn_ch6_exc_l1">ช่วงเวลาพัก</li>
+                                            <li data-i18n="mn_ch6_exc_l2">วันลาป่วย / วันพักผ่อนประจำปีและการขาดงานอื่นๆ</li>
+                                            <li data-i18n="mn_ch6_exc_l3">การเข้าร่วมฝึกอบรมในวันหยุด</li>
                                         </ul>
                                     </div>
                                     <div class="bg-gray-50 p-3 rounded border border-gray-200 w-full">
-                                        <span class="font-bold text-gray-800 block mb-1">ขั้นตอนการเบิก</span>
+                                        <span class="font-bold text-gray-800 block mb-1" data-i18n="mn_ch6_proc_title">ขั้นตอนการเบิก</span>
                                         <ul class="list-disc list-outside ml-4 text-gray-600 space-y-1">
-                                            <li><u>ต้องได้รับอนุมัติจากหัวหน้าก่อนทำ</u></li>
-                                            <li>ส่งแบบฟอร์มภายในวันที่ <strong>20 ของเดือน</strong></li>
+                                            <li data-i18n="mn_ch6_proc_l1"><u>ต้องได้รับอนุมัติจากหัวหน้าก่อนทำ</u></li>
+                                            <li data-i18n="mn_ch6_proc_l2">ส่งแบบฟอร์มภายในวันที่ <strong>20 ของเดือน</strong></li>
                                         </ul>
                                     </div>
                                 </div>
@@ -1110,33 +1110,33 @@
                         <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
                             <div class="bg-white p-4 rounded-lg border border-gray-200 shadow-sm w-full">
                                  <h5 class="font-bold text-red-700 flex items-center gap-2 mb-2">
-                                    <i data-lucide="shield-check" class="w-5 h-5"></i> ความซื่อสัตย์
+                                    <i data-lucide="shield-check" class="w-5 h-5"></i> <span data-i18n="mn_ch7_sec1_title">ความซื่อสัตย์</span>
                                 </h5>
                                 <ul class="list-disc list-outside ml-5 space-y-1 text-sm text-gray-700">
-                                    <li>ปฏิบัติตามกฎหมายและมาตรฐานจริยธรรมสูงสุด</li>
-                                    <li>ห้ามเปิดเผยข้อมูลความลับของบริษัท/ลูกค้า</li>
-                                    <li>ห้ามใช้ซอฟต์แวร์ละเมิดลิขสิทธิ์</li>
-                                    <li>ต้องเคารพความเป็นส่วนตัวของผู้ใช้รายอื่นตลอดเวลา ไฟล์ แผ่นดิสก์ จดหมายอิเล็กทรอนิกส์ ข้อมูล ฯลฯ</li>
+                                    <li data-i18n="mn_ch7_sec1_l1">ปฏิบัติตามกฎหมายและมาตรฐานจริยธรรมสูงสุด</li>
+                                    <li data-i18n="mn_ch7_sec1_l2">ห้ามเปิดเผยข้อมูลความลับของบริษัท/ลูกค้า</li>
+                                    <li data-i18n="mn_ch7_sec1_l3">ห้ามใช้ซอฟต์แวร์ละเมิดลิขสิทธิ์</li>
+                                    <li data-i18n="mn_ch7_sec1_l4">ต้องเคารพความเป็นส่วนตัวของผู้ใช้รายอื่นตลอดเวลา ไฟล์ แผ่นดิสก์ จดหมายอิเล็กทรอนิกส์ ข้อมูล ฯลฯ</li>
                                 </ul>
                             </div>
                             <div class="bg-white p-4 rounded-lg border border-gray-200 shadow-sm w-full">
                                 <h5 class="font-bold text-red-700 flex items-center gap-2 mb-2">
-                                    <i data-lucide="users" class="w-5 h-5"></i> พฤติกรรมส่วนบุคคลและจริยธรรม
+                                    <i data-lucide="users" class="w-5 h-5"></i> <span data-i18n="mn_ch7_sec2_title">พฤติกรรมส่วนบุคคลและจริยธรรม</span>
                                 </h5>
                                 <ul class="list-disc list-outside ml-5 space-y-1 text-sm text-gray-700">
-                                    <li>ห้ามประกอบธุรกิจแข่งขันกับบริษัท</li>
-                                    <li>ห้ามรับของกำนัลที่มีมูลค่าสูงหรือสินบน</li>
-                                    <li>ห้ามยืมเงินลูกค้าหรือคู่ค้า</li>
-                                    <li>การอ้างชื่อบริษัท ห้ามใช้ชื่อหรือความสัมพันธ์กับบริษัทไปรับรอง/ส่งเสริมองค์กรอื่น</li>
-                                    <li>การนําเข้าสู่ระบบซึ่งสิ่งลามกอนาจารหรือสิ่งที่คุกคามในพื้นที่ที่สามารถเข้าถึงได้อย่างสาธารณะ </li>
-                                    <li>ต้องเชื่อฟังอย่างสุจริตและอย่างเต็มที่และปฏิบัติตามและและเคารพซึ่งกฎหมาย ฯลฯ</li>
+                                    <li data-i18n="mn_ch7_sec2_l1">ห้ามประกอบธุรกิจแข่งขันกับบริษัท</li>
+                                    <li data-i18n="mn_ch7_sec2_l2">ห้ามรับของกำนัลที่มีมูลค่าสูงหรือสินบน</li>
+                                    <li data-i18n="mn_ch7_sec2_l3">ห้ามยืมเงินลูกค้าหรือคู่ค้า</li>
+                                    <li data-i18n="mn_ch7_sec2_l4">การอ้างชื่อบริษัท ห้ามใช้ชื่อหรือความสัมพันธ์กับบริษัทไปรับรอง/ส่งเสริมองค์กรอื่น</li>
+                                    <li data-i18n="mn_ch7_sec2_l5">การนําเข้าสู่ระบบซึ่งสิ่งลามกอนาจารหรือสิ่งที่คุกคามในพื้นที่ที่สามารถเข้าถึงได้อย่างสาธารณะ </li>
+                                    <li data-i18n="mn_ch7_sec2_l6">ต้องเชื่อฟังอย่างสุจริตและอย่างเต็มที่และปฏิบัติตามและและเคารพซึ่งกฎหมาย ฯลฯ</li>
                                 </ul>
                             </div>
                         </div>
-                        <div class="mt-4 bg-white p-4 rounded-lg border border-red-100 text-sm text-red-800">
+                        <div class="mt-4 bg-white p-4 rounded-lg border border-red-100 text-sm text-red-800" data-i18n="mn_ch7_it_pol">
                             <strong>นโยบายไอที:</strong> ห้ามใช้คอมพิวเตอร์บริษัทเพื่อธุรกิจส่วนตัว ห้ามแฮ็ก หรือละเมิดความเป็นส่วนตัวผู้อื่น
                         </div>
-                        <div class="mt-4 bg-red-50 p-4 rounded-lg border border-red-100 text-sm text-red-800">
+                        <div class="mt-4 bg-red-50 p-4 rounded-lg border border-red-100 text-sm text-red-800" data-i18n="mn_ch7_note">
                             <strong>หมายเหตุ:</strong> "เนื้อหาข้างต้นเป็นเพียงสรุปสาระสำคัญของข้อห้ามและจริยธรรมในการปฏิบัติงานเบื้องต้นเท่านั้นพนักงานมีหน้าที่ต้องศึกษาและปฏิบัติตามนโยบายบริษัทฉบับเต็มอย่างเคร่งครัดเพื่อรักษามาตรฐานขององค์กร"
                         </div>
                     </div>
@@ -1153,58 +1153,58 @@
                     <div id="manual-8" class="hidden bg-gray-50 p-3 sm:p-6 border-t border-gray-100">
                         <div class="space-y-4">
                             <div>
-                                <h4 class="font-bold text-red-700 mb-2">บทลงโทษทางวินัย</h4>
+                                <h4 class="font-bold text-red-700 mb-2" data-i18n="mn_ch8_sec1_title">บทลงโทษทางวินัย</h4>
                                 <div class="flex flex-wrap gap-2 text-sm">
-                                    <span class="bg-white border border-gray-200 px-3 py-1 rounded-full">1. ตักเตือนด้วยวาจา</span>
-                                    <span class="bg-white border border-gray-200 px-3 py-1 rounded-full">2. ตักเตือนเป็นหนังสือ</span>
-                                    <span class="bg-white border border-gray-200 px-3 py-1 rounded-full">3. พักงาน (ไม่จ่ายค่าจ้าง)</span>
-                                    <span class="bg-red-100 text-red-700 border border-red-200 px-3 py-1 rounded-full font-bold">4. เลิกจ้าง</span>
+                                    <span class="bg-white border border-gray-200 px-3 py-1 rounded-full" data-i18n="mn_ch8_sec1_1">1. ตักเตือนด้วยวาจา</span>
+                                    <span class="bg-white border border-gray-200 px-3 py-1 rounded-full" data-i18n="mn_ch8_sec1_2">2. ตักเตือนเป็นหนังสือ</span>
+                                    <span class="bg-white border border-gray-200 px-3 py-1 rounded-full" data-i18n="mn_ch8_sec1_3">3. พักงาน (ไม่จ่ายค่าจ้าง)</span>
+                                    <span class="bg-red-100 text-red-700 border border-red-200 px-3 py-1 rounded-full font-bold" data-i18n="mn_ch8_sec1_4">4. เลิกจ้าง</span>
                                 </div>
                             </div>
                             <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 text-sm">
                                 <div class="bg-white p-4 rounded-lg border border-red-200 border-l-4 border-l-red-500 w-full">
-                                    <h5 class="font-bold text-red-800 mb-2">ความผิดร้ายแรง (เลิกจ้างทันที/ไม่จ่ายชดเชย)</h5>
+                                    <h5 class="font-bold text-red-800 mb-2" data-i18n="mn_ch8_sec2_title">ความผิดร้ายแรง (เลิกจ้างทันที/ไม่จ่ายชดเชย)</h5>
                                     <ul class="list-disc list-outside ml-5 space-y-1 text-gray-700">
-                                        <li>ทุจริต / ยักยอกเงิน / สร้างยอดขายเท็จ</li>
-                                        <li>ละทิ้งหน้าที่ติดต่อกัน 3 วันทำงาน</li>
-                                        <li>เสพยาเสพติด / ดื่มสุราในบริษัท / การโจรกรรม </li>
-                                        <li>เปิดเผยความลับบริษัท / ปลอมเอกสาร</li>
-                                        <li>การกลั่นแกล้ง / การคุกคาม / และการเลือกปฏิบัต</li>
+                                        <li data-i18n="mn_ch8_sec2_l1">ทุจริต / ยักยอกเงิน / สร้างยอดขายเท็จ</li>
+                                        <li data-i18n="mn_ch8_sec2_l2">ละทิ้งหน้าที่ติดต่อกัน 3 วันทำงาน</li>
+                                        <li data-i18n="mn_ch8_sec2_l3">เสพยาเสพติด / ดื่มสุราในบริษัท / การโจรกรรม </li>
+                                        <li data-i18n="mn_ch8_sec2_l4">เปิดเผยความลับบริษัท / ปลอมเอกสาร</li>
+                                        <li data-i18n="mn_ch8_sec2_l5">การกลั่นแกล้ง / การคุกคาม / และการเลือกปฏิบัต</li>
                                     </ul>
                                 </div>
                                 <div class="bg-white p-4 rounded-lg border border-gray-200 w-full">
-                                    <h5 class="font-bold text-gray-800 mb-2">ความผิดทั่วไป (ตักเตือน)</h5>
+                                    <h5 class="font-bold text-gray-800 mb-2" data-i18n="mn_ch8_sec3_title">ความผิดทั่วไป (ตักเตือน)</h5>
                                     <ul class="list-disc list-outside ml-5 space-y-1 text-gray-600">
-                                        <li>มาสาย / ขาดงานโดยไม่ลา</li>
-                                        <li>ใช้เวลางานทำธุระส่วนตัว</li>
-                                        <li>แต่งกายไม่สุภาพ</li>
-                                        <li>การพาบุคคลภายนอกมาที่สํานักงานโดยไม่ได้รับอนุญาต</li>
-                                        <li>แต่งกายไม่สุภาพ</li>
+                                        <li data-i18n="mn_ch8_sec3_l1">มาสาย / ขาดงานโดยไม่ลา</li>
+                                        <li data-i18n="mn_ch8_sec3_l2">ใช้เวลางานทำธุระส่วนตัว</li>
+                                        <li data-i18n="mn_ch8_sec3_l3">แต่งกายไม่สุภาพ</li>
+                                        <li data-i18n="mn_ch8_sec3_l4">การพาบุคคลภายนอกมาที่สํานักงานโดยไม่ได้รับอนุญาต</li>
+                                        <li data-i18n="mn_ch8_sec3_l3">แต่งกายไม่สุภาพ</li>
                                     </ul>
                                 </div>
                             </div>
                             <div>
-                                <h4 class="font-bold text-red-700 mb-2">ค่าชดเชยกรณีเลิกจ้าง (ตามกฎหมาย)</h4>
+                                <h4 class="font-bold text-red-700 mb-2" data-i18n="mn_ch8_sec4_title">ค่าชดเชยกรณีเลิกจ้าง (ตามกฎหมาย)</h4>
                                 <div class="overflow-x-auto rounded-lg border border-gray-200 shadow-sm bg-white table-container">
                                     <table class="manual-table">
                                         <thead>
                                             <tr>
-                                                <th>อายุงาน</th>
-                                                <th>ค่าชดเชย</th>
+                                                <th data-i18n="mn_ch8_table_h1">อายุงาน</th>
+                                                <th data-i18n="mn_ch8_table_h2">ค่าชดเชย</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr><td>120 วัน - 1 ปี</td><td>30 วัน</td></tr>
-                                            <tr><td>1 - 3 ปี</td><td>90 วัน</td></tr>
-                                            <tr><td>3 - 6 ปี</td><td>180 วัน</td></tr>
-                                            <tr><td>6 - 10 ปี</td><td>240 วัน</td></tr>
-                                            <tr><td>10 - 20 ปี</td><td>300 วัน</td></tr>
-                                            <tr><td>20 ปีขึ้นไป</td><td>400 วัน</td></tr>
+                                            <tr><td data-i18n="mn_ch8_t_1">120 วัน - 1 ปี</td><td data-i18n="mn_ch8_t_1_v">30 วัน</td></tr>
+                                            <tr><td data-i18n="mn_ch8_t_2">1 - 3 ปี</td><td data-i18n="mn_ch8_t_2_v">90 วัน</td></tr>
+                                            <tr><td data-i18n="mn_ch8_t_3">3 - 6 ปี</td><td data-i18n="mn_ch8_t_3_v">180 วัน</td></tr>
+                                            <tr><td data-i18n="mn_ch8_t_4">6 - 10 ปี</td><td data-i18n="mn_ch8_t_4_v">240 วัน</td></tr>
+                                            <tr><td data-i18n="mn_ch8_t_5">10 - 20 ปี</td><td data-i18n="mn_ch8_t_5_v">300 วัน</td></tr>
+                                            <tr><td data-i18n="mn_ch8_t_6">20 ปีขึ้นไป</td><td data-i18n="mn_ch8_t_6_v">400 วัน</td></tr>
                                         </tbody>
                                     </table>
                                 </div>
                             </div>
-                            <div class="mt-4 bg-red-50 p-4 rounded-lg border border-red-100 text-sm text-red-800">
+                            <div class="mt-4 bg-red-50 p-4 rounded-lg border border-red-100 text-sm text-red-800" data-i18n="mn_ch7_note">
                             <strong>หมายเหตุ:</strong> "เนื้อหาข้างต้นเป็นเพียงสรุปสาระสำคัญของข้อห้ามและจริยธรรมในการปฏิบัติงานเบื้องต้นเท่านั้นพนักงานมีหน้าที่ต้องศึกษาและปฏิบัติตามนโยบายบริษัทฉบับเต็มอย่างเคร่งครัดเพื่อรักษามาตรฐานขององค์กร"
                             </div>
                         </div>
@@ -1220,25 +1220,25 @@
                         <i data-lucide="chevron-down" id="icon-manual-9" class="w-5 h-5 text-gray-400 transition-transform duration-300"></i>
                     </button>
                     <div id="manual-9" class="hidden bg-gray-50 p-3 sm:p-6 border-t border-gray-100">
-                        <p class="text-sm text-gray-600 mb-4">สำหรับพนักงานที่รู้สึกไม่ได้รับความเป็นธรรมในการปฏิบัติงาน หรือมีข้อขัดแย้ง (ไม่ใช่การขอเลื่อนตำแหน่งหรือเรื่องส่วนตัว)</p>
+                        <p class="text-sm text-gray-600 mb-4" data-i18n="mn_ch9_desc">สำหรับพนักงานที่รู้สึกไม่ได้รับความเป็นธรรมในการปฏิบัติงาน หรือมีข้อขัดแย้ง (ไม่ใช่การขอเลื่อนตำแหน่งหรือเรื่องส่วนตัว)</p>
                         <div class="relative pl-8 space-y-6 before:content-[''] before:absolute before:left-3 before:top-2 before:bottom-2 before:w-0.5 before:bg-gray-200">
                             <!-- Step 1 -->
                             <div class="relative">
                                 <div class="absolute -left-8 bg-red-100 text-red-700 w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold border border-red-200">1</div>
-                                <h5 class="font-bold text-gray-800 text-sm">ขั้นตอนที่ 1: หารือหัวหน้างาน</h5>
-                                <p class="text-sm text-gray-600 mt-1">พูดคุยกับผู้บังคับบัญชาโดยตรงหรือหัวหน้าหน่วยธุรกิจของตนก่อนเพื่อแก้ปัญหาเบื้องต้น</p>
+                                <h5 class="font-bold text-gray-800 text-sm" data-i18n="mn_ch9_step1_title">ขั้นตอนที่ 1: หารือหัวหน้างาน</h5>
+                                <p class="text-sm text-gray-600 mt-1" data-i18n="mn_ch9_step1_desc">พูดคุยกับผู้บังคับบัญชาโดยตรงหรือหัวหน้าหน่วยธุรกิจของตนก่อนเพื่อแก้ปัญหาเบื้องต้น</p>
                             </div>
                             <!-- Step 2 -->
                             <div class="relative">
                                 <div class="absolute -left-8 bg-red-100 text-red-700 w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold border border-red-200">2</div>
-                                <h5 class="font-bold text-gray-800 text-sm">ขั้นตอนที่ 2: ยื่นเรื่องต่อฝ่ายบริหาร</h5>
-                                <p class="text-sm text-gray-600 mt-1">หากไม่ได้รับการแก้ไขใน <strong>3 วันทำการ</strong> ให้ยื่นหนังสือต่อ HR เพื่อขอนัดพบผู้บริหารระดับสูง (COO/CEO/MD)</p>
+                                <h5 class="font-bold text-gray-800 text-sm" data-i18n="mn_ch9_step2_title">ขั้นตอนที่ 2: ยื่นเรื่องต่อฝ่ายบริหาร</h5>
+                                <p class="text-sm text-gray-600 mt-1" data-i18n="mn_ch9_step2_desc">หากไม่ได้รับการแก้ไขใน <strong>3 วันทำการ</strong> ให้ยื่นหนังสือต่อ HR เพื่อขอนัดพบผู้บริหารระดับสูง (COO/CEO/MD)</p>
                             </div>
                             <!-- Step 3 -->
                             <div class="relative">
                                 <div class="absolute -left-8 bg-red-100 text-red-700 w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold border border-red-200">3</div>
-                                <h5 class="font-bold text-gray-800 text-sm">ขั้นตอนที่ 3: การตัดสิน</h5>
-                                <p class="text-sm text-gray-600 mt-1">HR จะนัดหมายภายใน 7 วัน และฝ่ายบริหารจะแจ้งผลการตัดสินภายใน <strong>3 วันทำการ</strong> หลังการประชุม (ถือเป็นที่สิ้นสุด)</p>
+                                <h5 class="font-bold text-gray-800 text-sm" data-i18n="mn_ch9_step3_title">ขั้นตอนที่ 3: การตัดสิน</h5>
+                                <p class="text-sm text-gray-600 mt-1" data-i18n="mn_ch9_step3_desc">HR จะนัดหมายภายใน 7 วัน และฝ่ายบริหารจะแจ้งผลการตัดสินภายใน <strong>3 วันทำการ</strong> หลังการประชุม (ถือเป็นที่สิ้นสุด)</p>
                             </div>
                         </div>
                     </div>
