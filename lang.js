@@ -95,6 +95,14 @@ const translations = {
 
         // Chapter Section
         chapter1_title: "Chapter 1",
+        chapter2_title: "Chapter 2",
+        chapter3_title: "Chapter 3",
+        chapter4_title: "Chapter 4",
+        chapter5_title: "Chapter 5",
+        chapter6_title: "Chapter 6",
+        chapter7_title: "Chapter 7",
+        chapter8_title: "Chapter 8",
+        chapter9_title: "Chapter 9",
 
         // --- Manual Content Detail Translations ---
         // Chapter 1
