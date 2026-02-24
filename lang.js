@@ -6,6 +6,8 @@ const translations = {
         nav_policy: "Leave Policy",
         nav_manual: "Employee Manual",
         nav_calc: "Leave Calculator",
+        nav_salary_cer: "• Request Salary Cerficate",
+        nav_recommend_report: "• Feedback&Complaints",
         footer_text: "© Wuerth Thailand. Internal Use Only.",
         
         // Home Section
@@ -376,6 +378,8 @@ const translations = {
         nav_policy: "สิทธิการลา",
         nav_manual: "คู่มือพนักงาน",
         nav_calc: "คำนวณสิทธิวันลา",
+        nav_salary_cer: "• ขอใบรับรองเงินเดือน",
+        nav_recommend_report: "• ข้อเสนอแนะ&ร้องเรียน",
         footer_text: "© Wuerth Thailand. Internal Use Only.",
         
         // Home Section
