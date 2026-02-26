@@ -109,9 +109,9 @@ const translations = {
         // --- Manual Content Detail Translations ---
         // Chapter 1
         mn_ch1_sec1_title: "Job Classification and Grading",
-        mn_ch1_table_h1: "Group",
+        mn_ch1_table_h1: "Grade",
         mn_ch1_table_h2: "Level",
-        mn_ch1_table_h3: "Position",
+        mn_ch1_table_h3: "Designation",
         mn_ch1_note: "* Note: Positions 3 and 6 are the lowest, and 1 is the highest in each group.",
         mn_ch1_sec2_title: "Transfer and Relocation",
         mn_ch1_sec2_desc: "The Company has <u>absolute discretion</u> to transfer and assign employees to work in other departments or regional offices based on business needs as follows:",
@@ -124,6 +124,36 @@ const translations = {
         mn_ch1_sec3_l2: "<strong>Evaluation:</strong> At least 1 evaluation during probation with department head and MD",
         mn_ch1_sec3_l3: "<strong>Confirmation:</strong> Company will notify in writing. If failed, 1 payment cycle advance notice is given",
         mn_ch1_sec3_l4: "<strong>Termination:</strong> Company reserves the right to terminate immediately for job abandonment or inappropriate behavior",
+        // --- Chapter 1.2 Table Inside ---
+        mn_ch1_table_sm0_head: "Senior Management",
+        mn_ch1_table_sm1: "EVP/SVP",
+        mn_ch1_table_sm2: "CEO/Managing Director",
+        mn_ch1_table_sm3: "CFO/COO",
+        mn_ch1_table_sm4: "Field Sales - Regional Sales Director",
+        mn_ch1_table_sm4_1: "Inside Staff - Regional Finance Director",
+        mn_ch1_table_sm5: "Field Sales - Sales Director",
+        mn_ch1_table_sm5_1: "Inside Staff - Finance Director",
+        mn_ch1_table_sm6: "Director (w/o suboninates)",
+
+        mn_ch1_table_sm0_head: "Management",
+        mn_ch1_table_sm1: "Field Sales - Head of Division",
+        mn_ch1_table_sm1_1: "Inside Staff - Head of Department",
+        mn_ch1_table_sm2: "Field Sales - Senior Area Auto Sales Management",
+        mn_ch1_table_sm2_1: "Inside Staff - Department Manager",
+        mn_ch1_table_sm3: "Field Sales - Area Sales Manager, Perm. Project Leader",
+        mn_ch1_table_sm3_1: "Inside Staff - Supervisor / Team leader/ Assistant Manager",
+
+        mn_ch1_table_e0_head: "Executive",
+        mn_ch1_table_e1: "KAM,DB,Temp. Project Leader (w/0 subordinates)",
+        mn_ch1_table_e2: "Field Sales - Senior Sales Consultant",
+        mn_ch1_table_e2_1: "Inside Staff - Senior Office Staff",
+        mn_ch1_table_e3: "Field Sales - Sales Representive",
+        mn_ch1_table_e3_1: "Inside Staff - Office Staff",
+
+        mn_ch1_table_c1_head: "Non-Executive",
+        mn_ch1_table_c1: "Senior Operations Worker",
+        mn_ch1_table_c2: "Operation Worker",
+        mn_ch1_table_c3: "Intern/Traniee",
 
         // Chapter 2
         mn_ch2_sec1_title: "2.1 Normal Working Hours",
